@@ -7,8 +7,8 @@ import (
 
 type User struct {
 	orm.Model
-	Username string `orm-go:"NOT NULL"`
-	Email    string `orm-go:"NOT NULL"`
+	Username string `orm-go:"NOT NULL UNIQUE"`
+	Email    string `orm-go:"NOT NULL UNIQUE"`
 }
 
 
