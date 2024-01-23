@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/Bakarseck/orm-go"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -13,6 +15,10 @@ type User struct {
 
 func main() {
 	var user User
+<<<<<<< Updated upstream
+=======
+	fmt.Println("Welcome")
+>>>>>>> Stashed changes
 	orm := orm.NewORM()
 	orm.InitDB("test.db")
 	orm.AutoMigrate(user)
