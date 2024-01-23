@@ -15,10 +15,6 @@ type User struct {
 
 func main() {
 	var user User
-<<<<<<< Updated upstream
-=======
-	fmt.Println("Welcome")
->>>>>>> Stashed changes
 	orm := orm.NewORM()
 	orm.InitDB("test.db")
 	orm.AutoMigrate(user)
