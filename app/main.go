@@ -7,15 +7,15 @@ import (
 
 type User struct {
 	orm.Model
-	Username string `orm-go:"not null;unique"`
-	Email    string `orm-go:"not null;unique"`
+	Username string `orm-go:"NOT NULL"`
+	Email    string `orm-go:"NOT NULL"`
 }
 
 func main() {
-	// var user User
+	var user User
 	orm := orm.NewORM()
 	orm.InitDB("test.db")
-	// orm.AutoMigrate(user)
+	orm.AutoMigrate(user)
 }
 
 // import (
