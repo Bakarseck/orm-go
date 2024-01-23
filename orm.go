@@ -6,14 +6,13 @@ import (
 	"log"
 	"os"
 	"reflect"
+	"time"
 )
 
 type Model struct {
-	ID        int  `orm-go:"primaryKey;autoIncrement"`
-	CreatedAt Time `org-go:"current_timestamp"`
+	ID        int       `orm-go:"PRIMARY KEY AUTOINCREMENT"`
+	CreatedAt time.Time `orm-go:"DEFAULT CURRENT_TIMESTAMP"`
 }
-
-
 
 type ORM struct {
 	db *sql.DB
@@ -24,9 +23,7 @@ func NewORM() *ORM {
 }
 
 func (o *ORM) InitDB(name string) {
-	fmt.Println("ddd")
 	_, err := os.Stat(name)
-
 
 	if os.IsNotExist(err) {
 		file, err := os.Create(name)
@@ -46,22 +43,35 @@ func (o *ORM) InitDB(name string) {
 func (o *ORM) AutoMigrate(table interface{}) {
 	v := reflect.TypeOf(table)
 
-	sqlTable := ""
+	sqlTable := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s (\n", v.Name())
 	for i := 0; i < v.NumField(); i++ {
 		field := v.Field(i)
 
 		fieldType := v.Field(i).Type
-		gormTag := field.Tag.Get("orm-go")
+		if fieldType.Kind() == reflect.Struct {
+			for i := 0; i < fieldType.NumField(); i++ {
+				struct_field := fieldType.Field(i)
+				ormgoTag := struct_field.Tag.Get("orm-go")
+				sqlTable += "\t" + struct_field.Name + " " + GetType(struct_field.Type) + " " + ormgoTag + ",\n"
+			}
+		} else {
+			ormgoTag := field.Tag.Get("orm-go")
 
-		sqlTable += field.Name + " " + GetType(fieldType) + " " + gormTag + "\n"
+			if i == v.NumField()-1 {
+				sqlTable += "\t" + field.Name + " " + GetType(fieldType) + " " + ormgoTag + "\n"
+			} else {
+				sqlTable += "\t" + field.Name + " " + GetType(fieldType) + " " + ormgoTag + ",\n"
+			}
+		}
 
+		
 	}
-
+	sqlTable += ")"
 	fmt.Println(sqlTable)
 
-	_, err := o.db.Exec(sqlTable)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	// _, err := o.db.Exec(sqlTable)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
 }

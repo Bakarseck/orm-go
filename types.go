@@ -1,6 +1,8 @@
 package orm
 
-import "reflect"
+import (
+	"reflect"
+)
 
 func GetType(fieldType reflect.Type) (sqlType string) {
 	switch fieldType.Kind() {
@@ -11,14 +13,11 @@ func GetType(fieldType reflect.Type) (sqlType string) {
 	case reflect.Float64:
 		sqlType = "REAL"
 	case reflect.Struct:
-		if reflect.TypeOf(fieldType).Name() == "Time" {
-			sqlType = "TIME"
+
+		if fieldType.Name() == "Time" {
+			sqlType = "DATETIME"
 		}
 	}
 
 	return sqlType
 }
-
-type Time struct {}
-
-
