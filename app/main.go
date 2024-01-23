@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/Bakarseck/orm-go"
 	_ "github.com/mattn/go-sqlite3"
 )
