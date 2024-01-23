@@ -7,7 +7,7 @@ pull: stash
 apply: pull
 	git stash apply	
 
-push: pull
+push: pull apply
 	git add .
 	git commit -m "$(message)"
 	git push

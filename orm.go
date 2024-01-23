@@ -10,7 +10,7 @@ import (
 )
 
 type Model struct {
-	ID        int       `orm-go:"PRIMARY KEY AUTOINCREMENT"`
+	ID        int64      `orm-go:"PRIMARY KEY AUTOINCREMENT"`
 	CreatedAt time.Time `orm-go:"DEFAULT CURRENT_TIMESTAMP"`
 }
 
