@@ -7,7 +7,10 @@ pull: stash
 apply: pull
 	git stash apply	
 
-push:
+push: pull
 	git add .
-	git commit -m "$(message=)"
+	git commit -m "$(message)"
 	git push
+
+start:
+	cd $(app) && go run .	
