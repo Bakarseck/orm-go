@@ -9,27 +9,25 @@ import (
 )
 
 type Model struct {
-	ID       int   `orm-go:"primaryKey;autoIncrement"`
+	ID        int  `orm-go:"primaryKey;autoIncrement"`
 	CreatedAt Time `org-go:"current_timestamp"`
 }
 
 
-type User struct {
-	Model
-	Username string `orm-go:"not null;unique"`
-	Email    string `orm-go:"not null;unique"`
-}
 
 type ORM struct {
-	//db *sql.DB
+	db *sql.DB
 }
 
 func NewORM() *ORM {
 	return &ORM{}
 }
 
-func (o *ORM) InitDB(name string) (db *sql.DB) {
+func (o *ORM) InitDB(name string) {
+	fmt.Println("ddd")
 	_, err := os.Stat(name)
+
+
 	if os.IsNotExist(err) {
 		file, err := os.Create(name)
 		if err != nil {
@@ -37,23 +35,33 @@ func (o *ORM) InitDB(name string) (db *sql.DB) {
 		}
 		file.Close()
 	}
-
 	//database connection
-	db, err = sql.Open("sqlite3", name)
+	o.db, err = sql.Open("sqlite3", name)
 
 	if err != nil {
 		log.Fatal(err)
 	}
-	return
 }
 
 func (o *ORM) AutoMigrate(table interface{}) {
 	v := reflect.TypeOf(table)
 
+	sqlTable := ""
 	for i := 0; i < v.NumField(); i++ {
 		field := v.Field(i)
+
+		fieldType := v.Field(i).Type
 		gormTag := field.Tag.Get("orm-go")
-		fmt.Println(gormTag)
+
+		sqlTable += field.Name + " " + GetType(fieldType) + " " + gormTag + "\n"
+
 	}
 
+	fmt.Println(sqlTable)
+
+	_, err := o.db.Exec(sqlTable)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
