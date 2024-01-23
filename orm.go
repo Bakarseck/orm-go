@@ -10,7 +10,7 @@ import (
 )
 
 type Model struct {
-	ID        int64      `orm-go:"PRIMARY KEY AUTOINCREMENT"`
+	ID        int64     `orm-go:"PRIMARY KEY AUTOINCREMENT"`
 	CreatedAt time.Time `orm-go:"DEFAULT CURRENT_TIMESTAMP"`
 }
 
@@ -56,22 +56,17 @@ func (o *ORM) AutoMigrate(table interface{}) {
 			}
 		} else {
 			ormgoTag := field.Tag.Get("orm-go")
-
-			if i == v.NumField()-1 {
-				sqlTable += "\t" + field.Name + " " + GetType(fieldType) + " " + ormgoTag + "\n"
-			} else {
-				sqlTable += "\t" + field.Name + " " + GetType(fieldType) + " " + ormgoTag + ",\n"
-			}
+			sqlTable += "\t" + field.Name + " " + GetType(fieldType) + " " + ormgoTag + ",\n"
 		}
-
-		
 	}
-	sqlTable += ")"
+
+	sqlTable = sqlTable[:len(sqlTable)-2]
+	sqlTable += "\n)"
 	fmt.Println(sqlTable)
 
-	// _, err := o.db.Exec(sqlTable)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	return
-	// }
+	_, err := o.db.Exec(sqlTable)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
