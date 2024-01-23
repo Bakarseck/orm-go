@@ -1,5 +1,6 @@
 package main
 
+<<<<<<< Updated upstream
 import (
 	"encoding/json"
 	"fmt"
@@ -44,4 +45,12 @@ func main() {
 
 	fmt.Println(jwt)
 
+=======
+import "github.com/Bakarseck/orm-go"
+
+func main() {
+	//db := orm.NewORM().InitDB("mydb")
+
+	orm.NewORM().AutoMigrate(orm.User{})
+>>>>>>> Stashed changes
 }
