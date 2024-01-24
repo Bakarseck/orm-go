@@ -6,6 +6,7 @@ import (
 
 func GetType(fieldType reflect.Type) (sqlType string) {
 	switch fieldType.Kind() {
+	case reflect.Int:	
 	case reflect.Int64:
 		sqlType = "INTEGER"
 	case reflect.String:
