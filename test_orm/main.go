@@ -17,11 +17,18 @@ type Produit struct {
 	Prix         int64
 }
 
+type Comment struct {
+	orm.Model
+	Name_produit string `orm-go:"NOT NULL"`
+	Prix         int64
+}
+
 func main() {
 	user := User{}
 	produit := Produit{}
+	c := Comment{}
 
 	orm := orm.NewORM()
 	orm.InitDB("mydb.db")
-	orm.AutoMigrate(user, produit)
+	orm.AutoMigrate(user, produit, c)
 }

@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"reflect"
+	"time"
 )
 
 func NewORM() *ORM {
@@ -22,6 +23,13 @@ func (o *ORM) InitDB(name string) {
 		}
 		file.Close()
 	}
+
+	if _, err := os.Stat("migrates"); os.IsNotExist(err) {
+        err := os.Mkdir("migrates", 0755)
+        if err != nil {
+            log.Fatal(err)
+        }
+    }
 
 	o.db, err = sql.Open("sqlite3", name)
 	if err != nil {
@@ -67,6 +75,27 @@ func (o *ORM) AutoMigrate(tables ...interface{}) {
 		if err != nil {
 			fmt.Println(err)
 			return
+		}
+
+		createTableSQL := CreateTable(v.Name(), AllField...)
+		_, err = o.db.Exec(createTableSQL)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		// Créer un fichier SQL pour la table
+		currentTime := time.Now()
+		fileName := fmt.Sprintf("migrates/%s-create-table-%s.sql", currentTime.Format("15-04-2006-05-s"), v.Name())
+		file, err := os.Create(fileName)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer file.Close()
+
+		_, err = file.WriteString(createTableSQL)
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 
