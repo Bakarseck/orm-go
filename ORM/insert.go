@@ -35,8 +35,6 @@ func (o *ORM) Insert(tables ...interface{}) {
 			}
 			builder := NewSQLBuilder()
 			query, parameters := builder.Insert(_table, values).Build()
-			fmt.Println("Query: ", query)
-			fmt.Println("Parameters: ", parameters)
 			_, err := o.db.Exec(query, parameters...)
 			if err != nil {
 				log.Fatal(err)
