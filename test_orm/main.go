@@ -23,12 +23,21 @@ type Comment struct {
 	Prix         int64
 }
 
+type Post struct {
+	orm.Model
+	Title   string `orm-go:"NOT NULL"`
+	Content string `orm-go:"NOT NULL"`
+	UserId  int64  `orm-go:"foreign key (User)"`
+}
+
 func main() {
 	user := User{}
 	produit := Produit{}
 	c := Comment{}
 
+	p := Post{}
+
 	orm := orm.NewORM()
 	orm.InitDB("mydb.db")
-	orm.AutoMigrate(user, produit, c)
+	orm.AutoMigrate(user, produit, c, p)
 }
