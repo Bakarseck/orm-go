@@ -73,7 +73,6 @@ func (o *ORM) AutoMigrate(tables ...interface{}) {
 						ormgoTag = strings.TrimSpace(ormgoTag[:strings.Index(ormgoTag, "FOREIGN_KEY")])
 					}
 
-
 					AllField = append(AllField, NewField(structField.Name, structField.Type, ormgoTag))
 				}
 			} else {
@@ -93,9 +92,15 @@ func (o *ORM) AutoMigrate(tables ...interface{}) {
 
 		createTableSQL := CreateTable(v.Name(), AllField...)
 		if len(foreignKeys) > 0 {
-			createTableSQL = "\t" +strings.TrimSuffix(createTableSQL, "\n)")
-			createTableSQL += ",\n" + strings.Join(foreignKeys, ",\n") + "\n)"
+			createTableSQL = strings.TrimSuffix(createTableSQL, "\n)")
+			createTableSQL += ",\n" + "\t"+ strings.Join(foreignKeys, ",\n") + "\n)"
 		}
+
+		_, err := o.db.Exec(createTableSQL)
+        if err != nil {
+            fmt.Println(err)
+            return
+        }
 
 		// Créer un fichier SQL pour la table
 		currentTime := time.Now()
