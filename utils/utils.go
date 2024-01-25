@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+// The function `LoadEnv` reads an environment file, splits each line into key-value pairs, and sets
+// the corresponding environment variables.
 func LoadEnv(path string) error {
 	file, err := os.Open(path)
 	if err != nil {
@@ -27,4 +29,20 @@ func LoadEnv(path string) error {
 		}
 	}
 	return scanner.Err()
+}
+
+// The GetTag function in Go splits a tag string into a tag name and a map of tag attributes.
+func GetTag(tag string) (string, map[string]string) {
+	parts := strings.Split(tag, ",")
+	tagName := parts[0]
+	tagAttrs := make(map[string]string)
+
+	for _, attr := range parts[1:] {
+		keyValue := strings.Split(attr, ":")
+		if len(keyValue) == 2 {
+			tagAttrs[keyValue[0]] = keyValue[1]
+		}
+	}
+
+	return tagName, tagAttrs
 }

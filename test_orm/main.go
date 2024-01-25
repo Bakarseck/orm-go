@@ -27,7 +27,7 @@ type Post struct {
 	orm.Model
 	Title   string `orm-go:"NOT NULL"`
 	Content string `orm-go:"NOT NULL"`
-	UserId  int64  `orm-go:"foreign key (User)"`
+	UserId  int64  `orm-go:"FOREIGN_KEY:User"`
 }
 
 func main() {

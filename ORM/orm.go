@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"reflect"
+	"strings"
 	"time"
 )
 
@@ -25,11 +26,11 @@ func (o *ORM) InitDB(name string) {
 	}
 
 	if _, err := os.Stat("migrates"); os.IsNotExist(err) {
-        err := os.Mkdir("migrates", 0755)
-        if err != nil {
-            log.Fatal(err)
-        }
-    }
+		err := os.Mkdir("migrates", 0755)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 
 	o.db, err = sql.Open("sqlite3", name)
 	if err != nil {
@@ -51,42 +52,54 @@ func CreateTable(name string, fields ...*Field) string {
 }
 
 func (o *ORM) AutoMigrate(tables ...interface{}) {
-
 	for _, table := range tables {
 		var AllField []*Field
+		var foreignKeys []string
 		v := reflect.TypeOf(table)
 
 		for i := 0; i < v.NumField(); i++ {
 			field := v.Field(i)
-			fieldType := v.Field(i).Type
+			fieldType := field.Type
 			if fieldType.Kind() == reflect.Struct {
-				for i := 0; i < fieldType.NumField(); i++ {
-					struct_field := fieldType.Field(i)
-					ormgoTag := struct_field.Tag.Get(("orm-go"))
-					AllField = append(AllField, NewField(struct_field.Name, struct_field.Type, ormgoTag))
+				for j := 0; j < fieldType.NumField(); j++ {
+					structField := fieldType.Field(j)
+					ormgoTag := structField.Tag.Get("orm-go")
+
+					if strings.HasPrefix(ormgoTag, "FOREIGN_KEY") {
+						foreignKeyDetails := strings.Split(ormgoTag, ":")
+						if len(foreignKeyDetails) == 2 {
+							foreignKeys = append(foreignKeys, fmt.Sprintf("FOREIGN KEY (%s) REFERENCES %s", structField.Name, foreignKeyDetails[1]))
+						}
+						ormgoTag = strings.TrimSpace(ormgoTag[:strings.Index(ormgoTag, "FOREIGN_KEY")])
+					}
+
+
+					AllField = append(AllField, NewField(structField.Name, structField.Type, ormgoTag))
 				}
 			} else {
 				ormgoTag := field.Tag.Get("orm-go")
+
+				if strings.HasPrefix(ormgoTag, "FOREIGN_KEY") {
+					foreignKeyDetails := strings.Split(ormgoTag, ":")
+					if len(foreignKeyDetails) == 2 {
+						foreignKeys = append(foreignKeys, fmt.Sprintf("FOREIGN KEY (%s) REFERENCES %s", field.Name, foreignKeyDetails[1]))
+					}
+					ormgoTag = strings.TrimSpace(ormgoTag[:strings.Index(ormgoTag, "FOREIGN_KEY")])
+				}
+
 				AllField = append(AllField, NewField(field.Name, fieldType, ormgoTag))
 			}
 		}
 
-		_, err := o.db.Exec(CreateTable(v.Name(), AllField...))
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
 		createTableSQL := CreateTable(v.Name(), AllField...)
-		_, err = o.db.Exec(createTableSQL)
-		if err != nil {
-			fmt.Println(err)
-			return
+		if len(foreignKeys) > 0 {
+			createTableSQL = "\t" +strings.TrimSuffix(createTableSQL, "\n)")
+			createTableSQL += ",\n" + strings.Join(foreignKeys, ",\n") + "\n)"
 		}
 
 		// Créer un fichier SQL pour la table
 		currentTime := time.Now()
-		fileName := fmt.Sprintf("migrates/%s-create-table-%s.sql", currentTime.Format("15-04-2006-05-s"), v.Name())
+		fileName := fmt.Sprintf("migrates/%s-create-table-%s.sql", currentTime.Format("2006-01-02-15-04-05"), v.Name())
 		file, err := os.Create(fileName)
 		if err != nil {
 			log.Fatal(err)
@@ -98,5 +111,4 @@ func (o *ORM) AutoMigrate(tables ...interface{}) {
 			log.Fatal(err)
 		}
 	}
-
 }

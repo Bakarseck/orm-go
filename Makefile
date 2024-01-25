@@ -12,5 +12,8 @@ push: pull apply
 	git commit -m "$(message)"
 	git push
 
-start:
-	cd $(app) && go run .	
+start: rm-migrates
+	@cd $(app) && go run .
+
+rm-migrates:
+	cd test_orm && rm -rf migrates		
