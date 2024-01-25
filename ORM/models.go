@@ -13,7 +13,7 @@ type ORM struct {
 }
 
 type Model struct {
-	ID        int       `orm-go:"PRIMARY KEY AUTOINCREMENT"`
+	Id        int64       `orm-go:"PRIMARY KEY AUTOINCREMENT"`
 	CreatedAt time.Time `orm-go:"DEFAULT CURRENT_TIMESTAMP"`
 }
 
@@ -25,7 +25,7 @@ func (o *ORM) AddTable(t *Table) {
 	o.Tables = append(o.Tables, t)
 }
 
-func (o *ORM) GetTable(table string) *Table{
+func (o *ORM) GetTable(table string) *Table {
 	for _, t := range o.Tables {
 		if t.Name == table {
 			return t
@@ -34,13 +34,11 @@ func (o *ORM) GetTable(table string) *Table{
 	return nil
 }
 
-
 type Field struct {
 	Name string
 	Type reflect.Type
 	Tag  string
 }
-
 
 func NewField(name string, tp reflect.Type, tag string) *Field {
 	return &Field{
@@ -56,10 +54,9 @@ func TableField(f *Field) (fd string) {
 }
 
 type Table struct {
-	Name    string
+	Name      string
 	AllFields []*Field
 }
-
 
 func NewTable(name string) *Table {
 	return &Table{

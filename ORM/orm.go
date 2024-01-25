@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"reflect"
+	"strings"
 )
 
 func (o *ORM) InitDB(name string) {
@@ -27,14 +28,11 @@ func (o *ORM) InitDB(name string) {
 
 func CreateTable(name string, fields ...*Field) string {
 	sqlTable := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s (\n", name)
-	for i, field := range fields {
-		if i == len(fields)-1 {
-			sqlTable += "\t" + TableField(field) + "\n)"
-		} else {
-			sqlTable += "\t" + TableField(field) + ",\n"
-		}
-
+	var all []string
+	for _, field := range fields {
+		all = append(all, TableField(field))
 	}
+	sqlTable += strings.Join(all, ",\n") + "\n)"
 	return sqlTable
 }
 
@@ -63,7 +61,6 @@ func (o *ORM) AutoMigrate(tables ...interface{}) {
 		}
 
 		o.AddTable(_table)
-
 		fmt.Println(CreateTable(v.Name(), _table.AllFields...))
 		_, err := o.db.Exec(CreateTable(v.Name(), _table.AllFields...))
 		if err != nil {

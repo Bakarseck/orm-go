@@ -6,13 +6,13 @@ import (
 )
 
 type User struct {
-	orm.Model
-	Username string `orm-go:"NOT NULL UNIQUE"`
-	Email    string `orm-go:"NOT NULL UNIQUE"`
+	orm.Model 
+	Username  string `orm-go:"NOT NULL UNIQUE"`
+	Email     string `orm-go:"NOT NULL UNIQUE"`
 }
 
 type Produit struct {
-	orm.Model
+	orm.Model    
 	Name_produit string `orm-go:"NOT NULL"`
 	Prix         int64
 }
@@ -24,4 +24,16 @@ func main() {
 	orm := orm.NewORM()
 	orm.InitDB("mydb.db")
 	orm.AutoMigrate(user, produit)
+
+	u := User{
+		Username: "Mouhamed Sylla",
+		Email: "syllamouhamed99@gmail.com",
+	}
+
+	p := Produit{
+		Name_produit: "Macbook Pro",
+		Prix: 500000,
+	}
+
+	orm.Insert(u, p)
 }
