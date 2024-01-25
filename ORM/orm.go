@@ -8,10 +8,6 @@ import (
 	"reflect"
 )
 
-func NewORM() *ORM {
-	return &ORM{}
-}
-
 func (o *ORM) InitDB(name string) {
 	_, err := os.Stat(name)
 
@@ -43,31 +39,36 @@ func CreateTable(name string, fields ...*Field) string {
 }
 
 func (o *ORM) AutoMigrate(tables ...interface{}) {
-
 	for _, table := range tables {
-		var AllField []*Field
 		v := reflect.TypeOf(table)
+		_table := NewTable(v.Name())
 
 		for i := 0; i < v.NumField(); i++ {
+
 			field := v.Field(i)
 			fieldType := v.Field(i).Type
 			if fieldType.Kind() == reflect.Struct {
+
 				for i := 0; i < fieldType.NumField(); i++ {
 					struct_field := fieldType.Field(i)
 					ormgoTag := struct_field.Tag.Get(("orm-go"))
-					AllField = append(AllField, NewField(struct_field.Name, struct_field.Type, ormgoTag))
+					_table.AddField(NewField(struct_field.Name, struct_field.Type, ormgoTag))
 				}
+
 			} else {
 				ormgoTag := field.Tag.Get("orm-go")
-				AllField = append(AllField, NewField(field.Name, fieldType, ormgoTag))
+
+				_table.AddField(NewField(field.Name, fieldType, ormgoTag))
 			}
 		}
 
-		_, err := o.db.Exec(CreateTable(v.Name(), AllField...))
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-	}
+		o.AddTable(_table)
 
+		fmt.Println(CreateTable(v.Name(), _table.AllFields...))
+		_, err := o.db.Exec(CreateTable(v.Name(), _table.AllFields...))
+		if err != nil {
+			panic(err)
+		}
+		
+	}
 }
