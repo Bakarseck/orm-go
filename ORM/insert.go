@@ -1,18 +1,24 @@
 package orm
 
 import (
-	"fmt"
 	"log"
 	"reflect"
 )
 
+var (
+	__BUILDER__ = NewSQLBuilder()
+	__QUERY__   string
+	__PARAMS__  []interface{}
+)
+
 func (o *ORM) Insert(tables ...interface{}) {
 	for _, t := range tables {
+
+		_, __TABLE__ := InitTable(t)
+
 		if reflect.TypeOf(t).Kind() == reflect.Struct {
 			var values []interface{}
 			v := reflect.ValueOf(t)
-			nameTable := reflect.TypeOf(t).Name()
-			_table := o.GetTable(nameTable)
 
 			for i := 0; i < v.NumField(); i++ {
 				switch v.Field(i).Kind() {
@@ -26,18 +32,18 @@ func (o *ORM) Insert(tables ...interface{}) {
 					values = append(values, v.Field(i).Float())
 				case reflect.Struct:
 					if v.Field(i).Type().Name() == "Model" {
-						_table.AllFields = _table.AllFields[2:]
+						__TABLE__.AllFields = __TABLE__.AllFields[2:]
 					}
 				}
 			}
-			for _, v := range _table.AllFields {
-				fmt.Println(v.Name)
-			}
-			builder := NewSQLBuilder()
-			query, parameters := builder.Insert(_table, values).Build()
-			_, err := o.Db.Exec(query, parameters...)
-			if err != nil {
-				log.Fatal(err)
+			if len(values) > 0 {
+				__QUERY__, __PARAMS__ = __BUILDER__.Insert(__TABLE__, values).Build()
+				_, err := o.Db.Exec(__QUERY__, __PARAMS__...)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				__BUILDER__.Clear()
 			}
 		}
 	}

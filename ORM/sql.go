@@ -15,6 +15,11 @@ func (b *SQLBuilder) Build() (string, []interface{}) {
 	return b.query, b.parameters
 }
 
+func (b *SQLBuilder) Clear() {
+	b.parameters = nil
+	b.query = ""
+}
+
 func (builder *SQLBuilder) Insert(table *Table, values []interface{}) *SQLBuilder {
 
 	builder.query += "INSERT INTO " + table.Name + " (" + strings.Join(table.GetFieldName(), ", ") + ")" + " VALUES ("

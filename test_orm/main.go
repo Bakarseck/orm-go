@@ -17,6 +17,13 @@ type Produit struct {
 	Prix         int64
 }
 
+func NewUser(name, email string) User{
+	return User{
+		Username: name,
+		Email: email,
+	}
+}
+
 func main() {
 	user := User{}
 	produit := Produit{}
@@ -25,17 +32,15 @@ func main() {
 	orm.InitDB("mydb.db")
 	orm.AutoMigrate(user, produit)
 
-	// u := User{
-	// 	Username: "Mouhamed Sylla",
-	// 	Email: "syllamouhamed99@gmail.com",
-	// }
+	//u := NewUser("Mouhamed Sylla","syllamouhamed99@gmail.com",)
+	//u1 := NewUser("Abdou","abdou@gmail.com")
+	//u2 := NewUser("Sidi","sidi@gmail.com")
+	// // p := Produit{
+	// // 	Name_produit: "Macbook Pro",
+	// // 	Prix: 500000,
+	// // }
 
-	// p := Produit{
-	// 	Name_produit: "Macbook Pro",
-	// 	Prix: 500000,
-	// }
+	//orm.Insert(u1, u2)
 
-	// orm.Insert(u, p)
-
-	orm.SetModel("Username", "Abdou", "User").UpdateField("Username", "Mouhamed").Update(orm.Db)
+	orm.SetModel("Email", "abdou@gmail.com", "User").UpdateField("moussa@gmail.com").Update(orm.Db)
 }

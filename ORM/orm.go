@@ -38,27 +38,7 @@ func CreateTable(name string, fields ...*Field) string {
 
 func (o *ORM) AutoMigrate(tables ...interface{}) {
 	for _, table := range tables {
-		v := reflect.TypeOf(table)
-		_table := NewTable(v.Name())
-
-		for i := 0; i < v.NumField(); i++ {
-
-			field := v.Field(i)
-			fieldType := v.Field(i).Type
-			if fieldType.Kind() == reflect.Struct {
-
-				for i := 0; i < fieldType.NumField(); i++ {
-					struct_field := fieldType.Field(i)
-					ormgoTag := struct_field.Tag.Get(("orm-go"))
-					_table.AddField(NewField(struct_field.Name, struct_field.Type, ormgoTag))
-				}
-
-			} else {
-				ormgoTag := field.Tag.Get("orm-go")
-
-				_table.AddField(NewField(field.Name, fieldType, ormgoTag))
-			}
-		}
+		v, _table := InitTable(table)
 
 		o.AddTable(_table)
 		_, err := o.Db.Exec(CreateTable(v.Name(), _table.AllFields...))
@@ -67,4 +47,29 @@ func (o *ORM) AutoMigrate(tables ...interface{}) {
 		}
 
 	}
+}
+
+func InitTable(table interface{}) (reflect.Type, *Table) {
+	v := reflect.TypeOf(table)
+	_table := NewTable(v.Name())
+
+	for i := 0; i < v.NumField(); i++ {
+
+		field := v.Field(i)
+		fieldType := v.Field(i).Type
+		if fieldType.Kind() == reflect.Struct {
+
+			for i := 0; i < fieldType.NumField(); i++ {
+				struct_field := fieldType.Field(i)
+				ormgoTag := struct_field.Tag.Get(("orm-go"))
+				_table.AddField(NewField(struct_field.Name, struct_field.Type, ormgoTag))
+			}
+
+		} else {
+			ormgoTag := field.Tag.Get("orm-go")
+
+			_table.AddField(NewField(field.Name, fieldType, ormgoTag))
+		}
+	}
+	return v, _table
 }

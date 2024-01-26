@@ -2,6 +2,7 @@ package orm
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"reflect"
 )
@@ -13,8 +14,9 @@ type Modifier struct {
 	Model      *Table
 }
 
-func NewModifier(params map[string]interface{}, m *Table) *Modifier {
+func NewModifier(params map[string]interface{}, m *Table, f string) *Modifier {
 	return &Modifier{
+		field: f,
 		Parameters: params,
 		Model:      m,
 	}
@@ -29,19 +31,19 @@ func (m *Modifier) Update(db *sql.DB) {
 	}
 }
 
-func (m *Modifier) UpdateField(nameField string, value interface{}) *Modifier {
-	m.field = nameField
+func (m *Modifier) UpdateField(value interface{}) *Modifier {
 	m.value = value
 	return m
 }
 
-func (o *ORM) SetModel(column string, data interface{}, tableName string) *Modifier {
+func (o *ORM) SetModel(nameField string, data interface{}, tableName string) *Modifier {
 	_table := o.GetTable(tableName)
 	__params := make(map[string]interface{})
 
 	builder := NewSQLBuilder()
 
-	query, param := builder.Select().From(_table).Where(column, data).Build()
+	query, param := builder.Select().From(_table).Where(nameField, data).Build()
+	fmt.Println("Query:", query)
 	result, err := o.Db.Query(query, param...)
 	if err != nil {
 		log.Fatal(err)
@@ -59,10 +61,11 @@ func (o *ORM) SetModel(column string, data interface{}, tableName string) *Modif
 
 		for i, value := range values {
 			__params[_table.AllFields[i].Name] = reflect.ValueOf(value).Elem().Interface()
+			fmt.Println(value)
 		}
 	}
 
-	modif := NewModifier(__params, _table)
-
+	modif := NewModifier(__params, _table, nameField)
+	fmt.Println(modif)
 	return modif
 }
