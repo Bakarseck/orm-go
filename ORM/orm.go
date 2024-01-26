@@ -61,11 +61,10 @@ func (o *ORM) AutoMigrate(tables ...interface{}) {
 		}
 
 		o.AddTable(_table)
-		fmt.Println(CreateTable(v.Name(), _table.AllFields...))
 		_, err := o.Db.Exec(CreateTable(v.Name(), _table.AllFields...))
 		if err != nil {
 			panic(err)
 		}
-		
+
 	}
 }

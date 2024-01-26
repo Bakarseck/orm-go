@@ -2,7 +2,6 @@ package orm
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"reflect"
 )
@@ -59,13 +58,11 @@ func (o *ORM) SetModel(column string, data interface{}, tableName string) *Modif
 		}
 
 		for i, value := range values {
-			fmt.Println(reflect.ValueOf(value).Elem().Interface())
 			__params[_table.AllFields[i].Name] = reflect.ValueOf(value).Elem().Interface()
 		}
 	}
 
 	modif := NewModifier(__params, _table)
-	fmt.Println(modif)
 
 	return modif
 }
