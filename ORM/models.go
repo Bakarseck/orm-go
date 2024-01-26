@@ -8,7 +8,7 @@ import (
 )
 
 type ORM struct {
-	db     *sql.DB
+	Db     *sql.DB
 	Tables []*Table
 }
 

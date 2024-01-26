@@ -20,7 +20,7 @@ func (o *ORM) InitDB(name string) {
 		file.Close()
 	}
 
-	o.db, err = sql.Open("sqlite3", name)
+	o.Db, err = sql.Open("sqlite3", name)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -62,7 +62,7 @@ func (o *ORM) AutoMigrate(tables ...interface{}) {
 
 		o.AddTable(_table)
 		fmt.Println(CreateTable(v.Name(), _table.AllFields...))
-		_, err := o.db.Exec(CreateTable(v.Name(), _table.AllFields...))
+		_, err := o.Db.Exec(CreateTable(v.Name(), _table.AllFields...))
 		if err != nil {
 			panic(err)
 		}
