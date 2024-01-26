@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	orm "github.com/Bakarseck/orm-go/ORM"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -9,6 +11,11 @@ type User struct {
 	orm.Model
 	Username string `orm-go:"NOT NULL UNIQUE"`
 	Email    string `orm-go:"NOT NULL UNIQUE"`
+}
+
+type Test struct {
+	Id       int64  `orm-go:"NOT NULL UNIQUE"`
+	Username string `orm-go:"NOT NULL UNIQUE"`
 }
 
 type Produit struct {
@@ -35,9 +42,18 @@ func main() {
 	produit := Produit{}
 	c := Comment{}
 
+	t := Test{}
+
 	p := Post{}
 
 	orm := orm.NewORM()
 	orm.InitDB("mydb.db")
-	orm.AutoMigrate(user, produit, c, p)
+	orm.AutoMigrate(user, produit, c, p, t)
+	err := orm.ScanRows(&t)
+
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	fmt.Println(t)
 }
