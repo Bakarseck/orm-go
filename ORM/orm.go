@@ -45,7 +45,6 @@ func (o *ORM) AutoMigrate(tables ...interface{}) {
 		if err != nil {
 			panic(err)
 		}
-
 	}
 }
 

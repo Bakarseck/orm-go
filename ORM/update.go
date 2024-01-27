@@ -2,7 +2,6 @@ package orm
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"reflect"
 )
@@ -16,7 +15,7 @@ type Modifier struct {
 
 func NewModifier(params map[string]interface{}, m *Table, f string) *Modifier {
 	return &Modifier{
-		field: f,
+		field:      f,
 		Parameters: params,
 		Model:      m,
 	}
@@ -42,8 +41,7 @@ func (o *ORM) SetModel(nameField string, data interface{}, tableName string) *Mo
 
 	builder := NewSQLBuilder()
 
-	query, param := builder.Select().From(_table).Where(nameField, data).Build()
-	fmt.Println("Query:", query)
+	query, param := builder.SelectAll().From(_table).Where(nameField, data).Build()
 	result, err := o.Db.Query(query, param...)
 	if err != nil {
 		log.Fatal(err)
@@ -61,11 +59,9 @@ func (o *ORM) SetModel(nameField string, data interface{}, tableName string) *Mo
 
 		for i, value := range values {
 			__params[_table.AllFields[i].Name] = reflect.ValueOf(value).Elem().Interface()
-			fmt.Println(value)
 		}
 	}
 
 	modif := NewModifier(__params, _table, nameField)
-	fmt.Println(modif)
 	return modif
 }

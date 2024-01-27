@@ -19,6 +19,5 @@ func GetType(fieldType reflect.Type) (sqlType string) {
 			sqlType = "DATETIME"
 		}
 	}
-
 	return sqlType
 }

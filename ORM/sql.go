@@ -44,6 +44,21 @@ func (b *SQLBuilder) Update(updates *Modifier) *SQLBuilder {
 	return b
 }
 
+func (b *SQLBuilder) Delete() *SQLBuilder {
+	b.query += "DELETE "
+	return b
+}
+
+func (b *SQLBuilder) Select(columns ...string) *SQLBuilder {
+	b.query += "SELECT " + strings.Join(columns, ", ")
+	return b
+}
+
+func (b *SQLBuilder) SelectAll() *SQLBuilder {
+	b.query += "SELECT *"
+	return b
+}
+
 func (b *SQLBuilder) From(table *Table) *SQLBuilder {
 	b.query += " FROM " + table.Name
 	return b
@@ -67,7 +82,4 @@ func (b *SQLBuilder) Or(column string, value interface{}) *SQLBuilder {
 	return b
 }
 
-func (b *SQLBuilder) Select() *SQLBuilder {
-	b.query += "SELECT *"
-	return b
-}
+

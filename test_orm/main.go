@@ -17,10 +17,17 @@ type Produit struct {
 	Prix         int64
 }
 
-func NewUser(name, email string) User{
+func NewUser(name, email string) User {
 	return User{
 		Username: name,
-		Email: email,
+		Email:    email,
+	}
+}
+
+func NewProduit(name string, p int64) Produit {
+	return Produit{
+		Name_produit: name,
+		Prix:         p,
 	}
 }
 
@@ -40,7 +47,18 @@ func main() {
 	// // 	Prix: 500000,
 	// // }
 
-	//orm.Insert(u1, u2)
+	// var produits []interface{}
+	// for i := 1; i <= 100; i++ {
+	// 	name := fmt.Sprintf("Produit%d", i)
+	// 	produit := NewProduit(name, int64(i*5))
+	// 	produits = append(produits, produit)
+	// }
 
-	orm.SetModel("Email", "abdou@gmail.com", "User").UpdateField("moussa@gmail.com").Update(orm.Db)
+	// orm.Insert(produits...)
+
+	//orm.SetModel("Email", "abdou@gmail.com", "User").UpdateField("moussa@gmail.com").Update(orm.Db)
+
+	//orm.Delete(User{}, "Id", 2)
+
+	orm.Scan(User{}, "Email", "Username")
 }
