@@ -1,5 +1,7 @@
 package orm
 
+// The `Delete` function is a method of the `ORM` struct. It takes three parameters: `table`, `column`,
+// and `value`.
 func (o *ORM) Delete(table interface{}, column string, value interface{}) {
 	_, __table := InitTable(table)
 	__BUILDER__ := NewSQLBuilder()

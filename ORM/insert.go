@@ -11,6 +11,8 @@ var (
 	__PARAMS__  []interface{}
 )
 
+// The `Insert` function is a method of the `ORM` struct. It takes in one or more tables as arguments,
+// which are of type `interface{}`.
 func (o *ORM) Insert(tables ...interface{}) {
 	for _, t := range tables {
 
@@ -36,6 +38,7 @@ func (o *ORM) Insert(tables ...interface{}) {
 					}
 				}
 			}
+
 			if len(values) > 0 {
 				__QUERY__, __PARAMS__ = __BUILDER__.Insert(__TABLE__, values).Build()
 				_, err := o.Db.Exec(__QUERY__, __PARAMS__...)

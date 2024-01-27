@@ -4,6 +4,8 @@ import (
 	"reflect"
 )
 
+// The function GetType takes a reflect.Type as input and returns a string representing the
+// corresponding SQL data type.
 func GetType(fieldType reflect.Type) (sqlType string) {
 	switch fieldType.Kind() {
 	case reflect.Int:	

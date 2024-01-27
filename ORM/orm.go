@@ -10,6 +10,8 @@ import (
 	"time"
 )
 
+// The `InitDB` function is responsible for initializing the database connection and creating the
+// necessary files and directories for database migration.
 func (o *ORM) InitDB(name string) {
 	_, err := os.Stat(name)
 
@@ -34,6 +36,7 @@ func (o *ORM) InitDB(name string) {
 	}
 }
 
+// The CreateTable function creates a SQL table with the given name and fields.
 func CreateTable(name string, fields ...*Field) string {
 	sqlTable := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s (\n", name)
 	var all []string
@@ -44,6 +47,9 @@ func CreateTable(name string, fields ...*Field) string {
 	return sqlTable
 }
 
+// The `AutoMigrate` function is responsible for automatically creating database tables based on the
+// provided struct definitions. It takes in a variadic parameter `tables` which represents the struct
+// definitions of the tables to be created.
 func (o *ORM) AutoMigrate(tables ...interface{}) {
 	for _, table := range tables {
 		v, _table := InitTable(table)
@@ -75,6 +81,8 @@ func (o *ORM) AutoMigrate(tables ...interface{}) {
 	}
 }
 
+// The function `InitTable` initializes a table by extracting field information from a given struct
+// type and creating corresponding fields in the table.
 func InitTable(table interface{}) (reflect.Type, *Table) {
 	v := reflect.TypeOf(table)
 	_table := NewTable(v.Name())
