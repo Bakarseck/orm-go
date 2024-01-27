@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS Produit (
+	Name_produit TEXT NOT NULL,
+	Prix INTEGER ,
+	User_id INTEGER ,
+	FOREIGN KEY (User_id) REFERENCES User (Id)
+)

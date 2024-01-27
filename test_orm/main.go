@@ -12,9 +12,9 @@ type User struct {
 }
 
 type Produit struct {
-	orm.Model
 	Name_produit string `orm-go:"NOT NULL"`
 	Prix         int64
+	User_id     int64 `orm-go:"FOREIGN_KEY:User:Id"`
 }
 
 func NewUser(name, email string) User {
@@ -36,7 +36,7 @@ func main() {
 	produit := Produit{}
 
 	orm := orm.NewORM()
-	orm.InitDB("mydb.db")
+	orm.InitDB("dbTest.db")
 	orm.AutoMigrate(user, produit)
 
 	//u := NewUser("Mouhamed Sylla","syllamouhamed99@gmail.com",)
@@ -60,5 +60,5 @@ func main() {
 
 	//orm.Delete(User{}, "Id", 2)
 
-	orm.Scan(User{}, "Email", "Username")
+	//orm.Scan(User{}, "Email", "Username")
 }

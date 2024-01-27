@@ -56,6 +56,7 @@ func TableField(f *Field) (fd string) {
 type Table struct {
 	Name      string
 	AllFields []*Field
+	ForeignKey []string
 }
 
 func NewTable(name string) *Table {
@@ -67,6 +68,7 @@ func NewTable(name string) *Table {
 func (t *Table) AddField(f *Field) {
 	t.AllFields = append(t.AllFields, f)
 }
+
 
 func (t *Table) GetFieldName() []string {
 	var names []string
