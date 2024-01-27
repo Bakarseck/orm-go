@@ -16,7 +16,7 @@ type User struct {
 type Produit struct {
 	Name_produit string `orm-go:"NOT NULL"`
 	Prix         int64
-	User_id     int64 `orm-go:"FOREIGN_KEY:User:Id"`
+	User_id      int64 `orm-go:"FOREIGN_KEY:User:Id"`
 }
 
 func NewUser(name, email string) User {
@@ -43,9 +43,8 @@ func main() {
 
 	//u := NewUser("Mouhamed Sylla","syllamouhamed99@gmail.com")
 
-	u1 := NewUser("Abdou","abdou@gmail.com")
+	u1 := NewUser("Abdou", "abdou@gmail.com")
 	orm.Insert(u1)
-
 
 	//u2 := NewUser("Sidi","sidi@gmail.com")
 	// // p := Produit{

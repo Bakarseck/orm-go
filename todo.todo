@@ -1,9 +1,9 @@
 Operations:
-    ☐ Insert
-    ☐ Scan
-    ☐ Update
-    ☐ Delete
+    ✔ Insert @done(24-01-27 15:31)
+    ✔ Scan @done(24-01-27 15:31)
+    ✔ Update @done(24-01-27 15:31)
+    ✔ Delete @done(24-01-27 15:31)
     Filtering:
-        ☐ Where
-        ☐ Order
+        ✔ Where @done(24-01-27 15:31)
+        ✔ Order @done(24-01-27 15:31)
 
