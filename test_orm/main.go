@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	orm "github.com/Bakarseck/orm-go/ORM"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -39,8 +41,12 @@ func main() {
 	orm.InitDB("dbTest.db")
 	orm.AutoMigrate(user, produit)
 
-	//u := NewUser("Mouhamed Sylla","syllamouhamed99@gmail.com",)
-	//u1 := NewUser("Abdou","abdou@gmail.com")
+	//u := NewUser("Mouhamed Sylla","syllamouhamed99@gmail.com")
+
+	u1 := NewUser("Abdou","abdou@gmail.com")
+	orm.Insert(u1)
+
+
 	//u2 := NewUser("Sidi","sidi@gmail.com")
 	// // p := Produit{
 	// // 	Name_produit: "Macbook Pro",
@@ -60,5 +66,7 @@ func main() {
 
 	//orm.Delete(User{}, "Id", 2)
 
-	//orm.Scan(User{}, "Email", "Username")
+	r := orm.Scan(User{}, "Email", "Username")
+
+	fmt.Println(r)
 }
