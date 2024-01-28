@@ -16,9 +16,10 @@ type User struct {
 
 
 type Produit struct {
+	orm.Model
 	Name_produit string `orm-go:"NOT NULL"`
 	Prix         int64
-	User_id      int64 `orm-go:"FOREIGN_KEY:User:Id"`
+	User_id      int64 `orm-go:"NOT NULL FOREIGN_KEY:User:Id"`
 }
 
 func NewUser(name, email string) User {
@@ -40,34 +41,31 @@ func main() {
 	produit := Produit{}
 
 	orm := orm.NewORM()
-	orm.InitDB("dbTest.db")
+	orm.InitDB("test.db")
 	orm.AutoMigrate(user, produit)
 
-	//u := NewUser("Mouhamed Sylla","syllamouhamed99@gmail.com")
+	var produits []interface{}
+	for i := 1; i <= 100; i++ {
+		name := fmt.Sprintf("Produit%d", i)
+		produit := NewProduit(name, int64(i*5))
+		produits = append(produits, produit)
+	}
 
+	orm.Insert(produits...)
+
+	orm.SetModel("Email", "abdou@gmail.com", "User").UpdateField("moussa@gmail.com").Update(orm.Db)
+
+	orm.Delete(User{}, "Id", 2)
+	u := NewUser("Mouhamed Sylla", "syllamouhamed99@gmail.com")
 	u1 := NewUser("Abdou", "abdou@gmail.com")
-	orm.Insert(u1)
+	u2 := NewUser("Sidi", "sidi@gmail.com")
 
-	//u2 := NewUser("Sidi","sidi@gmail.com")
-	// // p := Produit{
-	// // 	Name_produit: "Macbook Pro",
-	// // 	Prix: 500000,
-	// // }
+	orm.Insert(u, u1, u2)
 
-	// var produits []interface{}
-	// for i := 1; i <= 100; i++ {
-	// 	name := fmt.Sprintf("Produit%d", i)
-	// 	produit := NewProduit(name, int64(i*5))
-	// 	produits = append(produits, produit)
-	// }
+	users := orm.Scan(User{}, "Id", "CreatedAt", "Email", "Username").([]User)
 
-	// orm.Insert(produits...)
+	for _, user := range users {
+		fmt.Println("User: ", user)
+	}
 
-	//orm.SetModel("Email", "abdou@gmail.com", "User").UpdateField("moussa@gmail.com").Update(orm.Db)
-
-	//orm.Delete(User{}, "Id", 2)
-
-	r := orm.Scan(User{}, "Email", "Username")
-
-	fmt.Println(r)
 }

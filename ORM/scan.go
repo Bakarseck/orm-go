@@ -3,12 +3,14 @@ package orm
 import (
 	"log"
 	"reflect"
+
+	"github.com/Bakarseck/orm-go/utils"
 )
 
 // The `Scan` function is a method of the `ORM` struct. It takes in a `table` interface and a variadic
 // parameter `columns` of type string. It returns a map with string keys and slice of interface{}
 // values.
-func (o *ORM) Scan(table interface{}, columns ...string) map[string][]interface{} {
+func (o *ORM) Scan(table interface{}, columns ...string) interface{} {
 	_, __table := InitTable(table)
 	__BUILDER__ := NewSQLBuilder()
 	query, param := __BUILDER__.Select(columns...).From(__table).Build()
@@ -37,5 +39,8 @@ func (o *ORM) Scan(table interface{}, columns ...string) map[string][]interface{
 			__results[columns[i]] = append(__results[columns[i]], reflect.ValueOf(value).Elem().Interface())
 		}
 	}
-	return __results
+
+	structSlice := utils.MapToStructs(__results, reflect.TypeOf(table))
+
+	return structSlice
 }

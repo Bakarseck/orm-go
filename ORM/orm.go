@@ -89,40 +89,25 @@ func InitTable(table interface{}) (reflect.Type, *Table) {
 	var foreignKeys []string
 
 	for i := 0; i < v.NumField(); i++ {
-
 		field := v.Field(i)
-		fieldType := v.Field(i).Type
+		fieldType := field.Type
+
 		if fieldType.Kind() == reflect.Struct {
-
-			for i := 0; i < fieldType.NumField(); i++ {
-				struct_field := fieldType.Field(i)
-				ormgoTag := struct_field.Tag.Get(("orm-go"))
-
-				if strings.HasPrefix(ormgoTag, "FOREIGN_KEY") {
-					foreignKeyDetails := strings.Split(ormgoTag, ":")
-					if len(foreignKeyDetails) == 3 {
-						foreignKeys = append(foreignKeys, fmt.Sprintf("FOREIGN KEY (%s) REFERENCES %s (%s)", struct_field.Name, foreignKeyDetails[1], foreignKeyDetails[2]))
-					}
-					ormgoTag = strings.TrimSpace(ormgoTag[:strings.Index(ormgoTag, "FOREIGN_KEY")])
-				}
-				_table.AddField(NewField(struct_field.Name, struct_field.Type, ormgoTag))
-				_table.ForeignKey = foreignKeys
+			// Gérer les sous-structs récursivement.
+			for j := 0; j < fieldType.NumField(); j++ {
+				structField := fieldType.Field(j)
+				ormgoTag, fk := GetTags(structField)
+				foreignKeys = append(foreignKeys, fk...)
+				_table.AddField(NewField(structField.Name, structField.Type, ormgoTag))
 			}
-
 		} else {
-			ormgoTag := field.Tag.Get("orm-go")
-
-			if strings.HasPrefix(ormgoTag, "FOREIGN_KEY") {
-				foreignKeyDetails := strings.Split(ormgoTag, ":")
-				if len(foreignKeyDetails) == 3 {
-					foreignKeys = append(foreignKeys, fmt.Sprintf("FOREIGN KEY (%s) REFERENCES %s (%s)", field.Name, foreignKeyDetails[1], foreignKeyDetails[2]))
-				}
-				ormgoTag = strings.TrimSpace(ormgoTag[:strings.Index(ormgoTag, "FOREIGN_KEY")])
-			}
-
+			// Gérer les champs normaux.
+			ormgoTag, fk := GetTags(field)
+			foreignKeys = append(foreignKeys, fk...)
 			_table.AddField(NewField(field.Name, fieldType, ormgoTag))
-			_table.ForeignKey = foreignKeys
 		}
+		_table.ForeignKey = foreignKeys
 	}
+
 	return v, _table
 }
