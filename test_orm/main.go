@@ -13,6 +13,8 @@ type User struct {
 	Email    string `orm-go:"NOT NULL UNIQUE"`
 }
 
+
+
 type Produit struct {
 	Name_produit string `orm-go:"NOT NULL"`
 	Prix         int64

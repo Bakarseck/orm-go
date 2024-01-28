@@ -54,11 +54,6 @@ func (b *SQLBuilder) Select(columns ...string) *SQLBuilder {
 	return b
 }
 
-func (b *SQLBuilder) SelectAll() *SQLBuilder {
-	b.query += "SELECT *"
-	return b
-}
-
 func (b *SQLBuilder) From(table *Table) *SQLBuilder {
 	b.query += " FROM " + table.Name
 	return b

@@ -60,7 +60,7 @@ func (o *ORM) SetModel(nameField string, data interface{}, tableName string) *Mo
 
 	builder := NewSQLBuilder()
 
-	query, param := builder.SelectAll().From(_table).Where(nameField, data).Build()
+	query, param := builder.Select("*").From(_table).Where(nameField, data).Build()
 	result, err := o.Db.Query(query, param...)
 	if err != nil {
 		log.Fatal(err)
