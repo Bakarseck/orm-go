@@ -6,6 +6,8 @@ import (
 	"strings"
 )
 
+// The GetTags function parses the "orm-go" tag of a struct field and returns the SQL attributes and
+// foreign keys specified in the tag.
 func GetTags(structField reflect.StructField) (string, []string) {
 	ormgoTag := structField.Tag.Get("orm-go")
 	if ormgoTag == "" {
