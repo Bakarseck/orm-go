@@ -1,0 +1,4 @@
+github.com/Bakarseck/orm-go v0.0.0-20240128144042-9d05a93c591d h1:ZIwEWHMlYqS285S4oTt/xClH01dcZWU5wnF0mnTSOj0=
+github.com/Bakarseck/orm-go v0.0.0-20240128144042-9d05a93c591d/go.mod h1:r/u4PsBeUfdMfC8qc+X9pmYIamhZiLJWKBW0ROYJXIw=
+github.com/mattn/go-sqlite3 v1.14.20 h1:BAZ50Ns0OFBNxdAqFhbZqdPcht1Xlb16pDCqkq1spr0=
+github.com/mattn/go-sqlite3 v1.14.20/go.mod h1:Uh1q+B4BYcTPb+yiD3kU8Ct7aC0hY9fxUwlHK0RXw+Y=

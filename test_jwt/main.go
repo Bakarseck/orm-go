@@ -30,7 +30,7 @@ func main() {
 
 	payload := &MyPayload{
 		Name: "Bakar",
-		Id: 12,
+		Id:   12,
 	}
 
 	token, err := jwt.GenerateJWT(header, payload, SECRET)
