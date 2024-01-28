@@ -7,6 +7,17 @@ import (
 	"time"
 )
 
+var (
+// The `Order` variable is a map that maps integers to strings. It is used to represent the order of
+// sorting in a query. The keys of the map are integers, where 0 represents ascending order ("ASC") and
+// 1 represents descending order ("DESC"). This map can be used to easily specify the sorting order in
+// a query by accessing the corresponding string value based on the desired order.
+	Order = map[int]string{
+		0: "ASC",
+		1: "DESC",
+	}
+)
+
 // The ORM type represents an object-relational mapping with a database connection and a collection of
 // tables.
 // @property Db - The `Db` property is a pointer to an instance of the `sql.DB` struct. This is
