@@ -111,4 +111,40 @@ func (b *SQLBuilder) Or(column string, value interface{}) *SQLBuilder {
 	return b
 }
 
+// The `OrderBy` method is a function of the `SQLBuilder` struct. It is used to construct an SQL `ORDER
+// BY` clause in a query.
+func (b *SQLBuilder) OrderBy(column string, order int) *SQLBuilder {
+	b.query += " ORDER BY " + column + " " + Order[order]
+	return b
+}
+
+// The `Limit` method is a function of the `SQLBuilder` struct. It is used to construct an SQL `LIMIT`
+// clause in a query.
+func (b *SQLBuilder) Limit(limit int) *SQLBuilder {
+	b.query += " LIMIT ?"
+	b.parameters = append(b.parameters, limit)
+	return b
+}
+
+// The `Join` method is a function of the `SQLBuilder` struct. It is used to construct an SQL `JOIN`
+// clause in a query.
+func (b *SQLBuilder) Join(table string, condition string) *SQLBuilder {
+	b.query += " JOIN " + table + " ON " + condition
+	return b
+}
+
+// The `GroupBy` method is a function of the `SQLBuilder` struct. It is used to construct an SQL `GROUP
+// BY` clause in a query.
+func (b *SQLBuilder) GroupBy(column string) *SQLBuilder {
+	b.query += " GROUP BY " + column
+	return b
+}
+
+// The `Having` method is a function of the `SQLBuilder` struct. It is used to construct an SQL
+// `HAVING` clause in a query. The `HAVING` clause is used to filter the results of a query based on a
+// condition that applies to the aggregated values.
+func (b *SQLBuilder) Having(condition string) *SQLBuilder {
+	b.query += " HAVING " + condition
+	return b
+}
 

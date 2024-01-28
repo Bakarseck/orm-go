@@ -16,6 +16,11 @@
 - `Where(column string, value interface{})`: Adds a WHERE clause with the given condition.
 - `And(column string, value interface{})`: Adds an AND condition to the WHERE clause.
 - `Or(column string, value interface{})`: Adds an OR condition to the WHERE clause.
+- `OrderBy(column string, order int)`: Adds an ORDER BY clause with the given column and order. 0 for ASC and DESC
+- `Limit(limit int)`: Adds a LIMIT clause with the specified number.
+- `Join(table string, condition string)`: Adds a JOIN clause with the given table and condition.
+- `GroupBy(column string)`: Adds a GROUP BY clause with the specified column.
+- `Having(condition string)`: Adds a HAVING clause with the given condition.
 
 ## Français
 
@@ -33,3 +38,8 @@
 - `Where(column string, value interface{})`: Ajoute une clause WHERE avec la condition donnée.
 - `And(column string, value interface{})`: Ajoute une condition AND à la clause WHERE.
 - `Or(column string, value interface{})`: Ajoute une condition OR à la clause WHERE.
+- `OrderBy(column string, order string)`: Ajoute une clause ORDER BY avec la colonne et l'ordre donnés. 0 pour ASC et 1 pour DESC
+- `Limit(limit int)`: Ajoute une clause LIMIT avec le nombre spécifié.
+- `Join(table string, condition string)`: Ajoute une clause JOIN avec la table et la condition données.
+- `GroupBy(column string)`: Ajoute une clause GROUP BY avec la colonne spécifiée.
+- `Having(condition string)`: Ajoute une clause HAVING avec la condition donnée.
