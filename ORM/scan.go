@@ -3,14 +3,12 @@ package orm
 import (
 	"log"
 	"reflect"
-
-	"github.com/Bakarseck/orm-go/utils"
 )
 
 // The `Scan` function is a method of the `ORM` struct. It takes in a `table` interface and a variadic
 // parameter `columns` of type string. It returns a map with string keys and slice of interface{}
 // values.
-func (o *ORM) Scan(table interface{}, columns ...string) interface{} {
+func (o *ORM) Scan(table interface{}, columns ...string) interface{}{
 	_, __table := InitTable(table)
 	__BUILDER__ := NewSQLBuilder()
 	query, param := __BUILDER__.Select(columns...).From(__table).Build()
@@ -20,7 +18,15 @@ func (o *ORM) Scan(table interface{}, columns ...string) interface{} {
 	}
 	defer rows.Close()
 
-	__results := make(map[string][]interface{})
+	var fields []reflect.StructField
+	for _, namefield := range columns {
+		f := __table.GetField(namefield)
+		newField := reflect.StructField{Name: namefield, Type: f.Type}
+		fields = append(fields, newField)
+	}
+
+	__results := reflect.MakeSlice(reflect.SliceOf(reflect.StructOf(fields)), 0, 0)
+
 	for rows.Next() {
 		values := make([]interface{}, 0)
 		for _, name := range columns {
@@ -35,12 +41,19 @@ func (o *ORM) Scan(table interface{}, columns ...string) interface{} {
 			log.Fatal(err)
 		}
 
+		newStruct := reflect.New(reflect.StructOf(fields)).Elem()
+
 		for i, value := range values {
-			__results[columns[i]] = append(__results[columns[i]], reflect.ValueOf(value).Elem().Interface())
+			val := reflect.ValueOf(value)
+			if val.Kind() == reflect.Ptr {
+				val = val.Elem()
+			}
+
+			newStruct.FieldByName(columns[i]).Set(val)
 		}
+
+		__results = reflect.Append(__results, newStruct)
 	}
 
-	structSlice := utils.MapToStructs(__results, reflect.TypeOf(table))
-
-	return structSlice
+	return __results.Interface()
 }

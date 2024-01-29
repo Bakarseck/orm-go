@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"log"
 	"os"
-	"reflect"
 	"strings"
 )
 
@@ -30,30 +29,4 @@ func LoadEnv(path string) error {
 	return scanner.Err()
 }
 
-// The function `MapToStructs` takes a map of string slices and a target type, and returns a slice of
-// structs with the values from the map assigned to the corresponding fields.
-func MapToStructs(result map[string][]interface{}, targetType reflect.Type) interface{} {
 
-	sliceLen := GetSliceLength(result)
-	slice := reflect.MakeSlice(reflect.SliceOf(targetType), sliceLen, sliceLen)
-
-	for i := 0; i < sliceLen; i++ {
-		elem := slice.Index(i).Addr().Elem()
-		for k, v := range result {
-			field := elem.FieldByName(k)
-			if field.IsValid() && field.CanSet() && i < len(v) {
-				field.Set(reflect.ValueOf(v[i]))
-			}
-		}
-	}
-
-	return slice.Interface()
-}
-
-// The function "GetSliceLength" returns the length of the first slice found in the given map.
-func GetSliceLength(result map[string][]interface{}) int {
-	for _, v := range result {
-		return len(v)
-	}
-	return 0
-}

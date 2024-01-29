@@ -140,3 +140,12 @@ func (t *Table) GetFieldName() []string {
 	}
 	return names
 }
+
+func (t *Table) GetField(name string) *Field{
+	for _, v := range t.AllFields {
+		if v.Name == name {
+			return v
+		}
+	}
+	return nil
+}

@@ -73,12 +73,6 @@ func (b *SQLBuilder) Select(columns ...string) *SQLBuilder {
 	return b
 }
 
-// The `SelectAll()` method is a function of the `SQLBuilder` struct. It is used to construct an SQL
-// `SELECT *` statement, which selects all columns from a table.
-func (b *SQLBuilder) SelectAll() *SQLBuilder {
-	b.query += "SELECT *"
-	return b
-}
 
 // The `From` method is a function of the `SQLBuilder` struct. It is used to construct an SQL `FROM`
 // clause in a query.
