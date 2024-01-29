@@ -1,4 +1,3 @@
 test_orm/migrates
 test_orm/dbTest.db
-go.mod
 go.sum
