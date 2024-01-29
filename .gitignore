@@ -1,4 +1,4 @@
 test_orm/migrates
 test_orm/dbTest.db
-./go.mod
-./go.sum
+go.mod
+go.sum
