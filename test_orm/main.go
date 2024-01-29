@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	orm "github.com/Bakarseck/orm-go/ORM"
+	orm "github.com/Bakarseck/orm/ORM"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -59,7 +59,6 @@ func main() {
 	// u2 := NewUser("Sidi", "sidi@gmail.com")
 
 	// orm.Insert(u, u1, u2)
-
 
 	users := orm.Scan(User{}, "Email", "Username").([]struct {
 		Email    string
