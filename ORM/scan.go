@@ -4,7 +4,7 @@ import (
 	"log"
 	"reflect"
 
-	"github.com/Bakarseck/orm-go/utils"
+	"github.com/Bakarseck/orm/utils"
 )
 
 // The `Scan` function is a method of the `ORM` struct. It takes in a `table` interface and a variadic

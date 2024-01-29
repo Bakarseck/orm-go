@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	orm "github.com/Bakarseck/orm-go/ORM"
+	orm "github.com/Bakarseck/orm/ORM"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -41,7 +41,6 @@ func main() {
 	orm := orm.NewORM()
 	orm.InitDB("test.db")
 	orm.AutoMigrate(user, produit)
-
 
 	users := orm.Scan(User{}, "Id", "CreatedAt", "Email", "Username").([]User)
 
