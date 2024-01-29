@@ -42,6 +42,7 @@ func main() {
 	orm.InitDB("test.db")
 	orm.AutoMigrate(user, produit)
 
+
 	users := orm.Scan(User{}, "Id", "CreatedAt", "Email", "Username").([]User)
 
 	for _, user := range users {
