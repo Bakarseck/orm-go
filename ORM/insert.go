@@ -18,24 +18,27 @@ func (o *ORM) Insert(tables ...interface{}) {
 
 		_, __TABLE__ := InitTable(t)
 
-		if reflect.TypeOf(t).Kind() == reflect.Struct {
-			var values []interface{}
-			v := reflect.ValueOf(t)
+		tType := reflect.TypeOf(t)
+		tValue := reflect.ValueOf(t)
 
-			for i := 0; i < v.NumField(); i++ {
-				switch v.Field(i).Kind() {
-				case reflect.Int:
-				case reflect.Int64:
-					values = append(values, v.Field(i).Int())
+		if tType.Kind() == reflect.Struct {
+			var values []interface{}
+			
+			for i := 0; i < tValue.NumField(); i++ {
+				field := tValue.Field(i)
+				fieldType := field.Type()
+
+				switch fieldType.Kind() {
+				case reflect.Int, reflect.Int64:
+					values = append(values, field.Int())
 				case reflect.String:
-					values = append(values, v.Field(i).String())
-				case reflect.Float32:
-				case reflect.Float64:
-					values = append(values, v.Field(i).Float())
-				case reflect.Struct:
-					if v.Field(i).Type().Name() == "Model" {
-						__TABLE__.AllFields = __TABLE__.AllFields[2:]
-					}
+					values = append(values, field.String())
+				case reflect.Float32, reflect.Float64:
+					values = append(values, field.Float())
+				}
+
+				if fieldType.Kind() == reflect.Struct && fieldType.Name() == "Model" {
+					__TABLE__.AllFields = __TABLE__.AllFields[2:]
 				}
 			}
 
@@ -45,7 +48,6 @@ func (o *ORM) Insert(tables ...interface{}) {
 				if err != nil {
 					log.Fatal(err)
 				}
-
 				__BUILDER__.Clear()
 			}
 		}
