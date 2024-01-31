@@ -40,18 +40,18 @@ func main() {
 
 	orm := orm.NewORM()
 	orm.InitDB("test.db")
-	// orm.AutoMigrate(user, produit)
+	//orm.AutoMigrate(User{}, Produit{})
 
-	// var produits []interface{}
-	// for i := 1; i <= 100; i++ {
-	// 	name := fmt.Sprintf("Produit%d", i)
-	// 	produit := NewProduit(name, int64(i*5))
-	// 	produits = append(produits, produit)
-	// }
+	var produits []interface{}
+	for i := 1; i <= 100; i++ {
+		name := fmt.Sprintf("Produit%d", i)
+		produit := NewProduit(name, int64(i*5))
+		produits = append(produits, produit)
+	}
 
-	// orm.Insert(produits...)
+	orm.Insert(produits...)
 
-	// orm.SetModel("Email", "abdou@gmail.com", "User").UpdateField("moussa@gmail.com").Update(orm.Db)
+	//orm.SetModel("Email", "abdou@gmail.com", "User").UpdateField("moussa@gmail.com").Update(orm.Db)
 
 	// orm.Delete(User{}, "Id", 2)
 	// u := NewUser("Mouhamed Sylla", "syllamouhamed99@gmail.com")
@@ -60,13 +60,11 @@ func main() {
 
 	// orm.Insert(u, u1, u2)
 
-
-	users := orm.Scan(User{}, "Email", "Username").([]struct {
-		Email    string
-		Username string
+	users := orm.Scan(Produit{}, "Prix").([]struct {
+		Prix int64
 	})
 
 	for _, v := range users {
-		fmt.Println("Username: ", v.Username, " -- Email: ", v.Email)
+		fmt.Println(v.Prix)
 	}
 }
