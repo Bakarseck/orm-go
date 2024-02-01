@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/Bakarseck/orm/validators"
+	"github.com/Bakarseck/orm-go/validators"
 )
 
 type User struct {

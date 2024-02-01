@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Bakarseck/orm/jwt"
-	"github.com/Bakarseck/orm/utils"
+	"github.com/Bakarseck/orm-go/jwt"
+	"github.com/Bakarseck/orm-go/utils"
 )
 
 type MyPayload struct {

@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	orm "github.com/Bakarseck/orm/ORM"
+	orm "github.com/Bakarseck/orm-go/ORM"
 	_ "github.com/mattn/go-sqlite3"
 )
 
