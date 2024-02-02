@@ -7,7 +7,6 @@ import (
 	"os"
 	"reflect"
 	"strings"
-	"time"
 )
 
 // The `InitDB` function is responsible for initializing the database connection and creating the
@@ -41,7 +40,7 @@ func CreateTable(name string, fields ...*Field) string {
 	sqlTable := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s (\n", name)
 	var all []string
 	for _, field := range fields {
-		all = append(all, "\t" + TableField(field))
+		all = append(all, "\t"+TableField(field))
 	}
 	sqlTable += strings.Join(all, ",\n") + "\n)"
 	return sqlTable
@@ -66,17 +65,32 @@ func (o *ORM) AutoMigrate(tables ...interface{}) {
 			panic(err)
 		}
 
-		currentTime := time.Now()
-		fileName := fmt.Sprintf("migrates/%s-create-table-%s.sql", currentTime.Format("2006-01-02-15-04-05"), v.Name())
-		file, err := os.Create(fileName)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer file.Close()
+		upFileName := fmt.Sprintf("create-table-%s.up.sql", v.Name())
+		downFileName := fmt.Sprintf("drop-table-%s.down.sql", v.Name())
 
-		_, err = file.WriteString(createTableSQL)
-		if err != nil {
-			log.Fatal(err)
+		if _, err := os.Stat(upFileName); os.IsNotExist(err) {
+			file, err := os.Create(upFileName)
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer file.Close()
+
+			_, err = file.WriteString(createTableSQL)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			downFile, err := os.Create(downFileName)
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer downFile.Close()
+
+			dropTableSQL := fmt.Sprintf("DROP TABLE IF EXISTS %s;", v.Name())
+			_, err = downFile.WriteString(dropTableSQL)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 	}
 }

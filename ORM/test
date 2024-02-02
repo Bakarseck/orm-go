@@ -1,0 +1,49 @@
+func (o *ORM) AutoMigrate(tables ...interface{}) {
+    for _, table := range tables {
+        v, _table := InitTable(table)
+
+        // Création de la commande SQL pour créer la table
+        createTableSQL := CreateTable(v.Name(), _table.AllFields...)
+        if len(_table.ForeignKey) > 0 {
+            createTableSQL = strings.TrimSuffix(createTableSQL, "\n)")
+            createTableSQL += ",\n" + "\t" + strings.Join(_table.ForeignKey, ",\n\t") + "\n)"
+        }
+
+        // Ajouter la table à la gestion interne de l'ORM
+        o.AddTable(_table)
+        _, err := o.Db.Exec(createTableSQL)
+        if err != nil {
+            panic(err)
+        }
+
+        upFileName := fmt.Sprintf("create-table-%s.up.sql", v.Name())
+        downFileName := fmt.Sprintf("drop-table-%s.down.sql", v.Name())
+
+        if _, err := os.Stat(upFileName); os.IsNotExist(err) {
+            file, err := os.Create(upFileName)
+            if err != nil {
+                log.Fatal(err)
+            }
+            defer file.Close()
+
+            _, err = file.WriteString(createTableSQL)
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            downFile, err := os.Create(downFileName)
+            if err != nil {
+                log.Fatal(err)
+            }
+            defer downFile.Close()
+
+            dropTableSQL := fmt.Sprintf("DROP TABLE IF EXISTS %s;", v.Name())
+            _, err = downFile.WriteString(dropTableSQL)
+            if err != nil {
+                log.Fatal(err)
+            }
+        } else {
+            log.Printf("Le fichier de migration pour la table %s existe déjà.\n", v.Name())
+        }
+    }
+}

@@ -1,0 +1,400 @@
+commit 894d7446a61830387064955ad5ecfaa26408c4c2
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Thu Feb 1 11:34:03 2024 +0000
+
+    fix: package
+
+commit 57ada27bb1f8edeba04455831f457f1358f55aaf
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Wed Jan 31 20:43:27 2024 +0000
+
+    fix: go.mod
+
+commit 807bd289b0a51fe747d5dc5968e452a60576e68f
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Tue Jan 30 15:58:55 2024 +0000
+
+    Refactorisation de la méthode Insert dans ORM
+    
+    Cette mise à jour apporte plusieurs améliorations à la méthode `Insert` de la classe `ORM`. Les changements incluent :
+    
+    - Refactorisation de la récupération du type et de la valeur de l'objet à insérer pour améliorer la clarté et la maintenabilité du code.
+    - Modification de la logique de traitement des champs de l'objet. La vérification du type de champ est désormais effectuée en utilisant `fieldType.Kind()` au lieu de `v.Field(i).Kind()`, ce qui rend le code plus lisible et aligné avec les bonnes pratiques en Go.
+    - Fusion des cas pour les types `reflect.Int` et `reflect.Int64`, ainsi que pour `reflect.Float32` et `reflect.Float64`, dans des instructions `switch` uniques pour une meilleure efficacité et clarté.
+    - Ajout d'une condition pour gérer spécifiquement les champs de type `Struct` nommés `Model`, en ajustant la logique pour manipuler `__TABLE__.AllFields`.
+    - Suppression d'une ligne vide superflue à la fin de la boucle pour nettoyer le code.
+    
+    Ces améliorations visent à optimiser la fonction `Insert` tout en conservant sa fonctionnalité globale.
+
+commit 7d084d8612121b5b010bd86cafd77f10671cf37e
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Tue Jan 30 09:44:12 2024 +0000
+
+    add: server
+
+commit c0de50c3e2f7ad6aa37397cc0ab52df7f1f3707a
+Merge: 93d9f07 666cb77
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Mon Jan 29 12:38:33 2024 +0000
+
+    merge: with insert scan
+
+commit 93d9f07174b081b16e8abd3b2d2eb8f7452831a3
+Merge: 3eefce2 22dc1f6
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Mon Jan 29 12:36:35 2024 +0000
+
+    merge: with insert scan
+
+commit 666cb77c5b078b77ce7185357a985ab6ff935cdf
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Mon Jan 29 11:43:43 2024 +0000
+
+    delete sum
+
+commit bf8349ccad36847a792f80f6b39fa17b3f6d7ea6
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Mon Jan 29 11:40:49 2024 +0000
+
+    delete mod and sum
+
+commit c5ddb4aebed31fa11d4584d3d2d9d10291cac794
+Merge: a831e8a e7f8978
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Mon Jan 29 11:39:41 2024 +0000
+
+    Merge branch 'main' of https://github.com/Bakarseck/orm-go
+
+commit a831e8a7f53aa5659026593a6dd72adaa2641655
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Mon Jan 29 11:39:16 2024 +0000
+
+    delete mod and sum
+
+commit e7f89782cd94257af438b5e04db799f66ccb02a4
+Author: mouhamedsylla <84444144+mouhamedsylla@users.noreply.github.com>
+Date:   Mon Jan 29 11:32:32 2024 +0000
+
+    Delete go.sum
+
+commit acb2042ae68ac21df2a710253b9877c1a0df5df7
+Author: mouhamedsylla <84444144+mouhamedsylla@users.noreply.github.com>
+Date:   Mon Jan 29 11:32:19 2024 +0000
+
+    Delete go.mod
+
+commit f99e6d68094afd418c158eb940a483a0e194a660
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Mon Jan 29 11:31:31 2024 +0000
+
+    delete mod and sum
+
+commit 3e212867c59c909a3344403e8a59236ad1e6a26a
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Mon Jan 29 11:23:10 2024 +0000
+
+    mod and sum ignore
+
+commit 22dc1f6837e90888513cd7cc518a4213ab7af524
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Sun Jan 28 17:42:01 2024 +0000
+
+    fix: scan to return formatable data
+
+commit 3eefce25fdafaa7f8aba5ee22dac62a7b1864da6
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Sun Jan 28 17:34:40 2024 +0000
+
+    add: decode.js
+
+commit 085dba1b694715f45601ee235cc7bb25a5e525b8
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Sun Jan 28 15:20:29 2024 +0000
+
+    add: comment for decode.js
+
+commit b913756194e61c70906a4b60218cf91f9d21ef76
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Sun Jan 28 15:15:27 2024 +0000
+
+    add: go.mod and decode.js
+
+commit 9f799272cc8e4ad691e89e839c09d8953ceec8ae
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Sun Jan 28 14:43:34 2024 +0000
+
+    remove SelectAll
+
+commit 9d05a93c591d0ca99b53b5c31e826171e102bb86
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Sun Jan 28 14:40:42 2024 +0000
+
+    add: Order By, Limit, Join, GroupBy, Having
+
+commit 53d49a2ebfeb30196cb93fb9c9223981c4909eed
+Merge: 8a200b6 2ddb885
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Sun Jan 28 14:32:36 2024 +0000
+
+    Merge branch 'insert' of https://github.com/Bakarseck/orm-go into insert
+
+commit ed66bfc9d8abffedc8cecbde1a0b2dce8fb0b430
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Sun Jan 28 14:31:58 2024 +0000
+
+    order
+
+commit 8a200b65d358cf030045e0e8df95006fee979039
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Sun Jan 28 14:28:38 2024 +0000
+
+    fix: removing SelectAll
+
+commit 72610077459c88616f3bdf6da6f8d782c2fd1b97
+Merge: c761dea 2ddb885
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Sun Jan 28 02:30:50 2024 +0000
+
+    merge: insert to main
+
+commit c761dea65096c697d2c40a154a7cf30b3b8e8847
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Sun Jan 28 02:29:42 2024 +0000
+
+    prepare: merge
+
+commit 2ddb8856d071a87e66e0d2e6f8035fa96d44f9c3
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Sun Jan 28 02:24:50 2024 +0000
+
+    add: Readme
+
+commit 295b8181123ef513e7803705b149f6048e3237c2
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Sun Jan 28 01:58:19 2024 +0000
+
+    Refactor ORM Scan Function and Enhance Utility Methods
+    
+    - Modified the ORM `Scan` method to return a slice of structs instead of a map. This change enhances data handling by directly converting query results into more structured and type-safe Go structures.
+    - Added `MapToStructs` function in the utils package. This utility function dynamically converts a map of string slices to a slice of structs, making it highly useful for transforming SQL query results into structured data.
+    - Updated the `GetTags` function in the ORM package for enhanced parsing of "orm-go" tags. This improvement aids in extracting SQL attributes and foreign keys more efficiently.
+    - Simplified the main function in the test_orm package to demonstrate the new `Scan` method usage. This includes direct scanning into User structs and printing the results, showcasing the ease of use and increased readability.
+    - Introduced `GetSliceLength` utility function to determine the length of slices within a map. This function aids in handling variable-length query results and ensures compatibility with different types of queries.
+    
+    Overall, these updates significantly improve the ORMs functionality and the utility methods versatility, aligning with modern Go best practices for handling database queries and data transformation.
+
+commit 2ff548574911537e2b424d406653916d129c5462
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Sun Jan 28 01:09:49 2024 +0000
+
+    Refactor ORM and SQLBuilder for Enhanced Clarity and Efficiency
+    
+    - Simplified the InitTable function in ORM/orm.go to streamline the processing of struct fields and foreign key handling. The function now uses the GetTags method for a more efficient and clear tag processing.
+    - Updated the SQLBuilder struct in ORM/sql.go with comprehensive comments for better understanding and maintenance of the code. Enhanced method documentation for Insert, Update, Delete, Select, and other query building functions.
+    - Refined the Modifier struct in ORM/update.go for clearer representation of a database table modification operation. Improved method documentation for Update and UpdateField for better clarity.
+    - Updated the Makefile to include new commands for removing migration files and the test database.
+    - Made adjustments in the test ORM main.go file, including database initialization and sample data insertion.
+
+commit abde638fe7023bd4d1d81541e523f87bac584a70
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Sat Jan 27 15:46:00 2024 +0000
+
+    commente added
+
+commit faf7d994de4a3bb6446389b87d0da532c59480ab
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Sat Jan 27 15:40:55 2024 +0000
+
+    add: todo
+
+commit 1ebc1bbdff677ef08ca9aa494a3a5866ba325ffd
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Sat Jan 27 15:27:52 2024 +0000
+
+    fix: change const to let
+
+commit cfade845d36bc9099d5eaba1da5a56e5ca007736
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Sat Jan 27 08:47:24 2024 +0000
+
+    fix: bakar foreignkey and migration folder creation
+
+commit fad4880d506169c17166c6e2fa036588b2e90fc8
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Sat Jan 27 07:52:03 2024 +0000
+
+    feature: scan and delete added
+
+commit 4c984431025bac28b604381285644088a2d89c07
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Fri Jan 26 18:37:56 2024 +0000
+
+    fix: insert interface and update paramters
+
+commit 16cfb81f153aedf8354715bb0e6b14255b516c04
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Fri Jan 26 14:52:24 2024 +0000
+
+    update feature added
+
+commit 7c028646744ea70ec598a5d91ef30ecaee5365ac
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Fri Jan 26 14:48:57 2024 +0000
+
+    update feature added
+
+commit cf87219041cfb85c520c1445504760e0737be640
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Thu Jan 25 16:20:46 2024 +0000
+
+    fix: remove print
+
+commit ea439028dbb72687ef9dadbefd793c6a30f07cee
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Thu Jan 25 16:18:12 2024 +0000
+
+    fix: remove comment in insert.go and add .gitignore
+
+commit 6dc92bc7d4d7e3329ef102c8213d2719deba889a
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Thu Jan 25 02:34:23 2024 +0000
+
+    fix: my stupid error
+
+commit 2009a7e0041c8194f7bfae6e5d7f41e51bbe9a16
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Thu Jan 25 01:52:11 2024 +0000
+
+    fix: refactoring + sql query builder added
+
+commit b25c454d0c40682435a12fe6f5cc24e2620b563b
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Wed Jan 24 12:54:51 2024 +0000
+
+    fix: add int for integer
+
+commit 7d29ffe2b297eb60b6120a48a568cb7e46c50677
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Wed Jan 24 12:38:42 2024 +0000
+
+    test jwt
+
+commit ff52dd30791b224fa95de7455ca3ef729dc11199
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Wed Jan 24 00:28:19 2024 +0000
+
+    fix: refactoring
+
+commit 6b96b93de2f4c7fd1f4e0445b2a16bd760a6e4eb
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Tue Jan 23 19:40:28 2024 +0000
+
+    task todo
+
+commit f9859c7ff743f4a20ee4c5b83d6b10d7ba27b96a
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Tue Jan 23 19:25:43 2024 +0000
+
+    trim last comma
+
+commit f23da5f5d7f5aa1f1704609deb631e18dcf59c79
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Tue Jan 23 19:06:12 2024 +0000
+
+    fix: type of id
+
+commit 206955c65320d20f6b071d177c9c34c21c5f3bb7
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Tue Jan 23 18:57:07 2024 +0000
+
+    makefile
+
+commit 4d685dc8be1b5fef400e14bfc3057fd4ecd7796b
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Tue Jan 23 18:54:59 2024 +0000
+
+    create table
+
+commit fb38e77e946e78c2e50d0b6e5815be086a0c8dfa
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Tue Jan 23 18:25:20 2024 +0000
+
+    not app
+
+commit 1fcf4e4d568841f41cd948d9ee681288477c766b
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Tue Jan 23 18:24:38 2024 +0000
+
+    not app
+
+commit bdfd5f9ca5e500d8162cb23502d1c697f48fe17d
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Tue Jan 23 18:24:05 2024 +0000
+
+    makefile
+
+commit 26501bd0e41b302214e196ba76407fa46380af29
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Tue Jan 23 18:22:03 2024 +0000
+
+    makefile
+
+commit 2f188c7496a75aa07a75e2fe9b214569af9d01d7
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Tue Jan 23 18:18:49 2024 +0000
+
+    add: automigrate
+
+commit 09497bd72f3e8ffd885c477a0c6dc02659493304
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Tue Jan 23 16:36:19 2024 +0000
+
+    orm
+
+commit e19123c73c06a18e048140954ac28b7c1521df59
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Tue Jan 23 16:17:41 2024 +0000
+
+    added type
+
+commit 77763369d5b4016fe11c31b957fe8b2a966b7f33
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Tue Jan 23 16:16:33 2024 +0000
+
+    added type
+
+commit 9564f0a8cdb9647b4a41ee9002143cc17378f26c
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Tue Jan 23 16:12:12 2024 +0000
+
+    add: type
+
+commit 5f516f3c671b13aae5b4e2d5ec5e2377e03a6d9c
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Tue Jan 23 16:08:39 2024 +0000
+
+    jwt: done
+
+commit 9b2a3ef0b1f487ae54f9e25a247f96736542709b
+Author: bakseck <seck.bakar@ugb.edu.sn>
+Date:   Tue Jan 23 14:59:11 2024 +0000
+
+    package orm
+
+commit 68857154a722fdce0d98b74e951831176dc730aa
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Tue Jan 23 14:53:51 2024 +0000
+
+    project initialization
+
+commit ca245f55c64a6a476fca57042bc94de8cc85747c
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Tue Jan 23 14:49:59 2024 +0000
+
+    project initialization
+
+commit 9f411c31c1dca2215bbc506fb8d65505f801bc76
+Author: Mouhamadou Sylla <syllamouhamed99@gmail.com>
+Date:   Tue Jan 23 14:49:46 2024 +0000
+
+    project initialization
