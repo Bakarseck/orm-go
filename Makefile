@@ -20,3 +20,5 @@ rm-db:
 
 start:
 	cd $(app) && go run .	
+
+		
