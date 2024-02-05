@@ -18,6 +18,7 @@ import (
 type ORM struct {
 	Db     *sql.DB
 	Tables []*Table
+	Custom *SQLBuilder
 }
 
 // The above type represents a model with an auto-incrementing primary key and a default created at
@@ -30,13 +31,15 @@ type ORM struct {
 // which means that the database will automatically set the value of CreatedAt to the current timestamp
 // when a new record is inserted.
 type Model struct {
-	Id        int64       `orm-go:"PRIMARY KEY AUTOINCREMENT"`
+	Id        int64     `orm-go:"PRIMARY KEY AUTOINCREMENT"`
 	CreatedAt time.Time `orm-go:"DEFAULT CURRENT_TIMESTAMP"`
 }
 
 // The NewORM function returns a new instance of the ORM struct.
 func NewORM() *ORM {
-	return &ORM{}
+	return &ORM{
+		Custom: NewSQLBuilder(),
+	}
 }
 
 // The `AddTable` method of the `ORM` struct is used to add a new table to the ORM instance. It takes a
@@ -98,8 +101,8 @@ func TableField(f *Field) (fd string) {
 // the foreign key constraints of the table. Each string in the slice represents a foreign key
 // constraint, typically in the format of `foreign_table_name(foreign_column_name)`.
 type Table struct {
-	Name      string
-	AllFields []*Field
+	Name       string
+	AllFields  []*Field
 	ForeignKey []string
 }
 
@@ -117,7 +120,6 @@ func (t *Table) AddField(f *Field) {
 	t.AllFields = append(t.AllFields, f)
 }
 
-
 // The `GetFieldName` method of the `Table` struct is used to retrieve the names of all the fields in
 // the table. It iterates over the `AllFields` slice of the table and appends the name of each field to
 // a new slice called `names`. Finally, it returns the `names` slice, which contains all the field
@@ -130,7 +132,7 @@ func (t *Table) GetFieldName() []string {
 	return names
 }
 
-func (t *Table) GetField(name string) *Field{
+func (t *Table) GetField(name string) *Field {
 	for _, v := range t.AllFields {
 		if v.Name == name {
 			return v

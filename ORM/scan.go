@@ -1,6 +1,7 @@
 package orm
 
 import (
+	"fmt"
 	"log"
 	"reflect"
 )
@@ -11,10 +12,13 @@ import (
 func (o *ORM) Scan(table interface{}, columns ...string) interface{}{
 	_, __table := InitTable(table)
 	__BUILDER__ := NewSQLBuilder()
+	__BUILDER__.custom = o.Custom
 	query, param := __BUILDER__.Select(columns...).From(__table).Build()
+	fmt.Println(query)
+	fmt.Println(param...)
 	rows, err := o.Db.Query(query, param...)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	defer rows.Close()
 
