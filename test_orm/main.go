@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	orm "github.com/Bakarseck/orm-go/ORM"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -51,7 +49,7 @@ func main() {
 
 	// orm.Insert(produits...)
 
-	//orm.SetModel("Email", "abdou@gmail.com", "User").UpdateField("moussa@gmail.com").Update(orm.Db)
+	orm.SetModel("Email", "syllamouhamed99@gmail.com", User{}).UpdateField("ahmed", "Username").Update(orm.Db)
 
 	// orm.Delete(User{}, "Id", 2)
 	//u := NewUser("Mouhamed Sylla", "syllamouhamed99@gmail.com")
@@ -60,14 +58,14 @@ func main() {
 
 	//orm.Insert(u)
 
-	orm.Custom.Where("Id", 2)
-	p := orm.Scan(Produit{}, "Prix", "Name_produit").([]struct {
-		Prix int64
-		Name_produit string
-	})
+	// orm.Custom.Where("Id", 2)
+	// p := orm.Scan(Produit{}, "Prix", "Name_produit").([]struct {
+	// 	Prix int64
+	// 	Name_produit string
+	// })
 
-	for _, v := range p {
-		fmt.Println(v.Prix)
-		fmt.Println(v.Name_produit)
-	}
+	// for _, v := range p {
+	// 	fmt.Println(v.Prix)
+	// 	fmt.Println(v.Name_produit)
+	// }
 }

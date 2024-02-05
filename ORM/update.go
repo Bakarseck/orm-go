@@ -2,6 +2,7 @@ package orm
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"reflect"
 )
@@ -10,7 +11,8 @@ import (
 // information about a specific field to be updated, including the new value, any
 // additional parameters, and a reference to the table schema.
 type Modifier struct {
-	field      string
+	field1      string
+	field2 string
 	value      interface{}
 	Parameters map[string]interface{}
 	Model      *Table
@@ -20,7 +22,8 @@ type Modifier struct {
 // a reference to the table model, and the name of the field to be modified.
 func NewModifier(params map[string]interface{}, m *Table, f string) *Modifier {
 	return &Modifier{
-		field:      f,
+
+		field1:      f,
 		Parameters: params,
 		Model:      m,
 	}
@@ -30,7 +33,7 @@ func NewModifier(params map[string]interface{}, m *Table, f string) *Modifier {
 // using the Modifier's details and executes it using the provided database connection.
 func (m *Modifier) Update(db *sql.DB) {
 	builder := NewSQLBuilder()
-	query, parameters := builder.Update(m).Where(m.field, m.Parameters[m.field]).Build()
+	query, parameters := builder.Update(m).Where(m.field1, m.Parameters[m.field1]).Build()
 	_, err := db.Exec(query, parameters...)
 	if err != nil {
 		log.Fatal(err)
@@ -39,7 +42,8 @@ func (m *Modifier) Update(db *sql.DB) {
 
 // UpdateField sets the new value for the field that will be updated in the database.
 // This method facilitates method chaining by returning a pointer to the Modifier.
-func (m *Modifier) UpdateField(value interface{}) *Modifier {
+func (m *Modifier) UpdateField(value interface{}, field string) *Modifier {
+	m.field2 = field
 	m.value = value
 	return m
 }
@@ -48,13 +52,14 @@ func (m *Modifier) UpdateField(value interface{}) *Modifier {
 // table model. It queries the database for the current values of the table row
 // identified by 'nameField' and 'data', and then creates a Modifier with this
 // current state, ready for updates.
-func (o *ORM) SetModel(nameField string, data interface{}, tableName string) *Modifier {
-	_table := o.GetTable(tableName)
+func (o *ORM) SetModel(nameField string, data interface{}, table interface{}) *Modifier {
+	_, _table := InitTable(table)
 	__params := make(map[string]interface{})
 
 	builder := NewSQLBuilder()
 
 	query, param := builder.Select("*").From(_table).Where(nameField, data).Build()
+	fmt.Println(query)
 	result, err := o.Db.Query(query, param...)
 	if err != nil {
 		log.Fatal(err)
@@ -74,6 +79,7 @@ func (o *ORM) SetModel(nameField string, data interface{}, tableName string) *Mo
 			__params[_table.AllFields[i].Name] = reflect.ValueOf(value).Elem().Interface()
 		}
 	}
+
 
 	modif := NewModifier(__params, _table, nameField)
 	return modif

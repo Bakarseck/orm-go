@@ -58,7 +58,7 @@ func (builder *SQLBuilder) Insert(table *Table, values []interface{}) *SQLBuilde
 func (b *SQLBuilder) Update(updates *Modifier) *SQLBuilder {
 	b.query += "UPDATE " + updates.Model.Name + " SET "
 	var setClauses []string
-	setClauses = append(setClauses, updates.field+" = ?")
+	setClauses = append(setClauses, updates.field2+" = ?")
 	b.parameters = append(b.parameters, updates.value)
 	b.query += strings.Join(setClauses, ", ")
 	return b
