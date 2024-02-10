@@ -9,13 +9,16 @@ import (
 // The `Scan` function is a method of the `ORM` struct. It takes in a `table` interface and a variadic
 // parameter `columns` of type string. It returns a map with string keys and slice of interface{}
 // values.
-func (o *ORM) Scan(table interface{}, columns ...string) interface{}{
+func (o *ORM) Scan(table interface{}, columns ...string) interface{} {
 	_, __table := InitTable(table)
 	__BUILDER__ := NewSQLBuilder()
 	__BUILDER__.custom = o.Custom
 	query, param := __BUILDER__.Select(columns...).From(__table).Build()
-	fmt.Println(query)
-	fmt.Println(param...)
+
+	__BUILDER__.Clear()
+	__BUILDER__.custom.Clear()
+	
+	fmt.Println(query, param)
 	rows, err := o.Db.Query(query, param...)
 	if err != nil {
 		log.Fatal(err)
@@ -28,6 +31,8 @@ func (o *ORM) Scan(table interface{}, columns ...string) interface{}{
 		newField := reflect.StructField{Name: namefield, Type: f.Type}
 		fields = append(fields, newField)
 	}
+
+	fmt.Println(fields)
 
 	__results := reflect.MakeSlice(reflect.SliceOf(reflect.StructOf(fields)), 0, 0)
 
