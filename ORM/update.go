@@ -34,6 +34,8 @@ func NewModifier(params map[string]interface{}, m *Table, f string) *Modifier {
 func (m *Modifier) Update(db *sql.DB) {
 	builder := NewSQLBuilder()
 	query, parameters := builder.Update(m).Where(m.field1, m.Parameters[m.field1]).Build()
+	fmt.Println("q: ", query)
+	fmt.Println(parameters...)
 	_, err := db.Exec(query, parameters...)
 	if err != nil {
 		log.Fatal(err)

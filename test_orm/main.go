@@ -35,12 +35,19 @@ func NewProduit(name string, p int64) Produit {
 }
 
 func main() {
-	user := User{}
-	produit := Produit{}
+	//user := User{}
+	//produit := Produit{}
 
 	orm := orm.NewORM()
 	orm.InitDB("test.db")
-	orm.AutoMigrate(user, produit)
+	// Orm.Insert(User{
+	// 	Username: "modou",
+	// 	Email:    "modou@gmail.com",
+	// })
+	//Orm.Custom.OrderBy("id", 1).Limit(1)
+	//user := Orm.Scan(User{}, "Username").([]User)
+	//fmt.Println(user)
+	//orm.AutoMigrate(User{}, Produit{})
 
 	var produits []interface{}
 	for i := 1; i <= 100; i++ {
@@ -49,7 +56,11 @@ func main() {
 		produits = append(produits, produit)
 	}
 
-	orm.Insert(produits...)
+	// orm.Insert(produits...)
+	//Orm.Custom.Limit(1)
+	//p := Orm.Scan(Produit{}, "Prix").([]Produit)[0]
+	Orm.Custom.And("User_id", 1)
+	Orm.SetModel("Id", 1, Produit{}).UpdateField(1, "Prix").Update(Orm.Db)
 
 	// orm.Delete(User{}, "Id", 2)
 	// u := NewUser("Mouhamed Sylla", "syllamouhamed99@gmail.com")
