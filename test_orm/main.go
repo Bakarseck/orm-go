@@ -35,12 +35,19 @@ func NewProduit(name string, p int64) Produit {
 }
 
 func main() {
-	user := User{}
-	produit := Produit{}
+	//user := User{}
+	//produit := Produit{}
 
 	orm := orm.NewORM()
 	orm.InitDB("test.db")
-	orm.AutoMigrate(user, produit)
+	// Orm.Insert(User{
+	// 	Username: "modou",
+	// 	Email:    "modou@gmail.com",
+	// })
+	//Orm.Custom.OrderBy("id", 1).Limit(1)
+	//user := Orm.Scan(User{}, "Username").([]User)
+	//fmt.Println(user)
+	//orm.AutoMigrate(User{}, Produit{})
 
 	var produits []interface{}
 	for i := 1; i <= 100; i++ {
@@ -49,23 +56,35 @@ func main() {
 		produits = append(produits, produit)
 	}
 
-	orm.Insert(produits...)
-
-	// orm.SetModel("Email", "abdou@gmail.com", "User").UpdateField("moussa@gmail.com").Update(orm.Db)
+	// orm.Insert(produits...)
+	//Orm.Custom.Limit(1)
+	//p := Orm.Scan(Produit{}, "Prix").([]Produit)[0]
+	Orm.Custom.And("User_id", 1)
+	Orm.SetModel("Id", 1, Produit{}).UpdateField(1, "Prix").Update(Orm.Db)
 
 	// orm.Delete(User{}, "Id", 2)
-	u := NewUser("Mouhamed Sylla", "syllamouhamed99@gmail.com")
-	u1 := NewUser("Abdou", "abdou@gmail.com")
-	u2 := NewUser("Sidi", "sidi@gmail.com")
+	// u := NewUser("Mouhamed Sylla", "syllamouhamed99@gmail.com")
+	// u1 := NewUser("Abdou", "abdou@gmail.com")
+	// u2 := NewUser("Sidi", "sidi@gmail.com")
 
-	orm.Insert(u, u1, u2)
+	// orm.Insert(u, u1, u2)
 
-	users := orm.Scan(User{}, "Email", "Username").([]struct {
-		Email    string
-		Username string
+	orm.SetModel("Email", "syllamouhamed99@gmail.com", User{}).UpdateField("ahmed", "Username").Update(orm.Db)
+
+	orm.Custom.Where("Id", 2).Or("ID", 3)
+	p := orm.Scan(Produit{}, "Prix", "Name_produit").([]struct {
+		Prix         int64
+		Name_produit string
 	})
 
-	for _, v := range users {
-		fmt.Println("Username: ", v.Username, " -- Email: ", v.Email)
+	orm.Custom.Where("Username", "ahmed")
+	query := orm.Scan(User{}, "Email").([]struct {
+		Email string
+	})
+
+	fmt.Println(query)
+
+	for _, v := range p {
+		fmt.Println(v)
 	}
 }

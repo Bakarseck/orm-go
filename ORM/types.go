@@ -8,12 +8,11 @@ import (
 // corresponding SQL data type.
 func GetType(fieldType reflect.Type) (sqlType string) {
 	switch fieldType.Kind() {
-	case reflect.Int:	
-	case reflect.Int64:
+	case reflect.Int64, reflect.Int:
 		sqlType = "INTEGER"
 	case reflect.String:
 		sqlType = "TEXT"
-	case reflect.Float64:
+	case reflect.Float64, reflect.Float32:
 		sqlType = "REAL"
 	case reflect.Struct:
 
