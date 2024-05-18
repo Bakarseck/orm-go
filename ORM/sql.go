@@ -2,6 +2,17 @@ package orm
 
 import "strings"
 
+var (
+	// The `Order` variable is a map that maps integers to strings. It is used to represent the order of
+	// sorting in a query. The keys of the map are integers, where 0 represents ascending order ("ASC") and
+	// 1 represents descending order ("DESC"). This map can be used to easily specify the sorting order in
+	// a query by accessing the corresponding string value based on the desired order.
+		Order = map[int]string{
+			0: "ASC",
+			1: "DESC",
+		}
+	)
+
 // The SQLBuilder type is used to construct SQL queries with parameters.
 // @property {string} query - The `query` property is a string that represents the SQL query being
 // built by the SQLBuilder. It will be used to store the SQL query as it is being constructed.
@@ -10,6 +21,7 @@ import "strings"
 type SQLBuilder struct {
 	query      string
 	parameters []interface{}
+	custom     *SQLBuilder
 }
 
 // The NewSQLBuilder function returns a new instance of the SQLBuilder struct.
@@ -21,6 +33,10 @@ func NewSQLBuilder() *SQLBuilder {
 // and the parameters as a tuple of type `(string, []interface{})`. This allows the caller to retrieve
 // the final SQL query string and the parameters that were added to the query.
 func (b *SQLBuilder) Build() (string, []interface{}) {
+	if b.custom != nil {
+		b.query += b.custom.query
+		b.parameters = append(b.parameters, b.custom.parameters...)
+	}
 	return b.query, b.parameters
 }
 
@@ -53,7 +69,7 @@ func (builder *SQLBuilder) Insert(table *Table, values []interface{}) *SQLBuilde
 func (b *SQLBuilder) Update(updates *Modifier) *SQLBuilder {
 	b.query += "UPDATE " + updates.Model.Name + " SET "
 	var setClauses []string
-	setClauses = append(setClauses, updates.field+" = ?")
+	setClauses = append(setClauses, updates.field2+" = ?")
 	b.parameters = append(b.parameters, updates.value)
 	b.query += strings.Join(setClauses, ", ")
 	return b
@@ -72,7 +88,6 @@ func (b *SQLBuilder) Select(columns ...string) *SQLBuilder {
 	b.query += "SELECT " + strings.Join(columns, ", ")
 	return b
 }
-
 
 // The `From` method is a function of the `SQLBuilder` struct. It is used to construct an SQL `FROM`
 // clause in a query.
@@ -141,4 +156,3 @@ func (b *SQLBuilder) Having(condition string) *SQLBuilder {
 	b.query += " HAVING " + condition
 	return b
 }
-

@@ -5,27 +5,24 @@ import (
 	"reflect"
 )
 
-// The `Scan` function is a method of the `ORM` struct. It takes in a `table` interface and a variadic
-// parameter `columns` of type string. It returns a map with string keys and slice of interface{}
-// values.
+// This function `Scan` in the ORM package is responsible for executing a SQL query, scanning the
+// results into struct fields, and returning a slice of the scanned results.
 func (o *ORM) Scan(table interface{}, columns ...string) interface{} {
-	_, __table := InitTable(table)
+	Type, __table := InitTable(table)
 	__BUILDER__ := NewSQLBuilder()
-	query, param := __BUILDER__.Select(columns...).From(__table).Build()
+	var query string
+	var param []interface{}
+	__BUILDER__.custom = o.Custom
+	query, param = __BUILDER__.Select(columns...).From(__table).Build()
+
 	rows, err := o.Db.Query(query, param...)
+	defer __BUILDER__.Clear()
 	if err != nil {
-		panic(err)
+		return nil
 	}
 	defer rows.Close()
 
-	var fields []reflect.StructField
-	for _, namefield := range columns {
-		f := __table.GetField(namefield)
-		newField := reflect.StructField{Name: namefield, Type: f.Type}
-		fields = append(fields, newField)
-	}
-
-	__results := reflect.MakeSlice(reflect.SliceOf(reflect.StructOf(fields)), 0, 0)
+	__results := reflect.MakeSlice(reflect.SliceOf(Type), 0, 0)
 
 	for rows.Next() {
 		values := make([]interface{}, 0)
@@ -41,7 +38,7 @@ func (o *ORM) Scan(table interface{}, columns ...string) interface{} {
 			log.Fatal(err)
 		}
 
-		newStruct := reflect.New(reflect.StructOf(fields)).Elem()
+		newStruct := reflect.New(Type).Elem()
 
 		for i, value := range values {
 			val := reflect.ValueOf(value)

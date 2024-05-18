@@ -4,18 +4,6 @@ import (
 	"database/sql"
 	"reflect"
 	"strings"
-	"time"
-)
-
-var (
-// The `Order` variable is a map that maps integers to strings. It is used to represent the order of
-// sorting in a query. The keys of the map are integers, where 0 represents ascending order ("ASC") and
-// 1 represents descending order ("DESC"). This map can be used to easily specify the sorting order in
-// a query by accessing the corresponding string value based on the desired order.
-	Order = map[int]string{
-		0: "ASC",
-		1: "DESC",
-	}
 )
 
 // The ORM type represents an object-relational mapping with a database connection and a collection of
@@ -29,6 +17,7 @@ var (
 type ORM struct {
 	Db     *sql.DB
 	Tables []*Table
+	Custom *SQLBuilder
 }
 
 // The above type represents a model with an auto-incrementing primary key and a default created at
@@ -41,13 +30,15 @@ type ORM struct {
 // which means that the database will automatically set the value of CreatedAt to the current timestamp
 // when a new record is inserted.
 type Model struct {
-	Id        int64       `orm-go:"PRIMARY KEY AUTOINCREMENT"`
-	CreatedAt time.Time `orm-go:"DEFAULT CURRENT_TIMESTAMP"`
+	Id        int    `orm-go:"PRIMARY KEY AUTOINCREMENT"`
+	CreatedAt string `orm-go:"DEFAULT CURRENT_TIMESTAMP"`
 }
 
 // The NewORM function returns a new instance of the ORM struct.
 func NewORM() *ORM {
-	return &ORM{}
+	return &ORM{
+		Custom: NewSQLBuilder(),
+	}
 }
 
 // The `AddTable` method of the `ORM` struct is used to add a new table to the ORM instance. It takes a
@@ -109,8 +100,8 @@ func TableField(f *Field) (fd string) {
 // the foreign key constraints of the table. Each string in the slice represents a foreign key
 // constraint, typically in the format of `foreign_table_name(foreign_column_name)`.
 type Table struct {
-	Name      string
-	AllFields []*Field
+	Name       string
+	AllFields  []*Field
 	ForeignKey []string
 }
 
@@ -128,7 +119,6 @@ func (t *Table) AddField(f *Field) {
 	t.AllFields = append(t.AllFields, f)
 }
 
-
 // The `GetFieldName` method of the `Table` struct is used to retrieve the names of all the fields in
 // the table. It iterates over the `AllFields` slice of the table and appends the name of each field to
 // a new slice called `names`. Finally, it returns the `names` slice, which contains all the field
@@ -141,7 +131,7 @@ func (t *Table) GetFieldName() []string {
 	return names
 }
 
-func (t *Table) GetField(name string) *Field{
+func (t *Table) GetField(name string) *Field {
 	for _, v := range t.AllFields {
 		if v.Name == name {
 			return v
